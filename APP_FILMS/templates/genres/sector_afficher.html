@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %} Afficher GENRES {% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<p>
+				Secteur
+			</p>
+            <table class="table table-bordered table-sm">
+            {% if data %}
+                <thead>
+                    <tr>
+                        <th class="align-middle">
+                            id
+                        </th>
+                        <th class="align-middle">
+                            Nom
+                        </th>
+                    </tr>
+                </thead>
+            {% endif %}
+
+            {% for row in data %}
+				<tbody>
+					<tr>
+						<td class="align-middle">
+							{{ row.id_sector }}
+						</td>
+						<td class="align-middle">
+							{{ row.name_sector }}
+						</td>
+
+						<td class="text-center" class="align-middle">
+							<a class="btn btn-warning" href="{{ url_for('sector_edit', id = row.id_sector) }}" role="button">Edit</a>
+						</td>
+						<td class="text-center" class="align-middle">
+							<a class="btn btn-danger" href="{{ url_for('sector_delete', id = row.id_sector) }}" role="button">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+            {% else %}
+				<tbody>
+					<tr>
+						<td>
+							Aucunes données
+						</td>
+					</tr>
+				</tbody>
+            {% endfor %}
+			</table>
+			<p class="text-center" class="align-left">
+						<a class="btn btn-primary" href="{{ url_for('sector_ajouter') }}" role="button">Ajouter</a>
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

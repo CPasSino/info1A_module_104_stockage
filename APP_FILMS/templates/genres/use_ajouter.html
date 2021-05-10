@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %} Ajouter un GENRE (WTF) {% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<p>
+				Ajouter un nouvel enregistrement
+			</p>
+			<form action="" method="POST" novalidate>
+				<!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
+				{{ form.hidden_tag() }}
+				<div class="form-group">
+					<p>
+						{{ form.fk_device.label }}<br>
+						{{ form.fk_device(size=32) }}<br>
+						{% for error in form.fk_device.errors %}
+							<span style="color: red;">[{{ error }}]</span>
+						{% endfor %}
+					</p>
+					<p>
+						{{ form.fk_customer.label }}<br>
+						{{ form.fk_customer(size=32) }}<br>
+						{% for error in form.fk_customer.errors %}
+							<span style="color: red;">[{{ error }}]</span>
+						{% endfor %}
+					</p>
+					<p>
+						{{ form.date_start_use.label }}<br>
+						{{ form.date_start_use(size=32) }}<br>
+						{% for error in form.date_start_use.errors %}
+							<span style="color: red;">[{{ error }}]</span>
+						{% endfor %}
+					</p>
+					<p>
+						{{ form.date_end_use.label }}<br>
+						{{ form.date_end_use(size=32) }}<br>
+						{% for error in form.date_end_use.errors %}
+							<span style="color: red;">[{{ error }}]</span>
+						{% endfor %}
+					</p>
+					<p>
+						{{ form.reason_end_use.label }}<br>
+						{{ form.reason_end_use(size=32) }}<br>
+						{% for error in form.reason_end_use.errors %}
+							<span style="color: red;">[{{ error }}]</span>
+						{% endfor %}
+					</p>
+
+				</div>
+				{{ form.submit(class="btn btn-primary") }}
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
