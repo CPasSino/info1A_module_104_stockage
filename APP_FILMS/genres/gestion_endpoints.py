@@ -426,7 +426,8 @@ def use_ajouter():
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
-                strsql_insert_genre = f"""INSERT INTO t_use (id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use) VALUES (NULL,"{int(form.fk_device.data())}", "{int(form.fk_customer.data ())}", "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data.lower()}")"""
+                strsql_insert_genre = f"""INSERT INTO t_use (id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use) 
+                                        VALUES (NULL,{int(form.fk_device.data)}, {int(form.fk_customer.data)}, "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data.lower()}")"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -443,10 +444,9 @@ def use_ajouter():
                 pymysql.ProgrammingError,
                 pymysql.InternalError,
                 TypeError) as erreur_gest_genr_crud:
-            code, msg = erreur_gest_genr_crud.args
-            code, msg = erreur_gest_genr_crud.args
-            flash(f"{error_codes.get(code, msg)} ", "danger")
-            flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
+            msg = erreur_gest_genr_crud.args
+            flash(f"{error_codes.get(msg)} ", "danger")
+            flash(f"Erreur dans Gestion genres CRUD "
                   f"{erreur_gest_genr_crud.args[0]} , "
                   f"{erreur_gest_genr_crud}", "danger")
 
