@@ -18,22 +18,37 @@
 	<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootswatch-4/darkly/bootstrap.min.css') }}">-->
 
 	<!-- https://bootswatch.com/superhero/ -->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootswatch-4/superhero/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootswatch-4/zephyr/bootstrap.min.css') }}">
 	<!-- https://flask.palletsprojects.com/en/1.1.x/patterns/favicon/ -->
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
 	{% block head %}
 	{% endblock %}
+	<style>
+		body {
+				  background-color: #272e2b !important;
+
+			   }
+		tr {
+			color: #ffffff !important;
+			}
+
+
+	</style>
 </head>
 <body>
 
 
 {% block header %} {% endblock %}
-
+<nav class="navbar navbar-expand-md" aria-hidden="true">
+    <a class="navbar-brand" href="#"></a>
+</nav>
 {% include 'flash_messages.html' %}
+
+
 <!-- Navigation -->
 <div class="container">
-	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-secondary">
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="{{ url_for('mapagepricipale') }}">Home</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">

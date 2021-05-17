@@ -13,44 +13,44 @@
 				<div class="form-group">
 					<p>
 						{{ form.first_name.label }}<br>
-						{{ form.first_name(size=32) }}<br>
+						{{ form.first_name(size=32 , class="form-control form-control-lg is-invalid" if form.first_name.errors else "form-control form-control-lg") }}<br>
 						{% for error in form.first_name.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.last_name.label }}<br>
-						{{ form.last_name(size=32) }}<br>
+						{{ form.last_name(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.last_name.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.sector.label }}<br>
-						{{ form.sector(size=32) }}<br>
+						{{ form.sector(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.sector.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.location.label }}<br>
-						{{ form.location(size=32) }}<br>
+						{{ form.location(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.location.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.phone_customer.label }}<br>
-						{{ form.phone_customer(size=32) }}<br>
+						{{ form.phone_customer(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.phone_customer.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.personal_number_customer.label }}<br>
-						{{ form.personal_number_customer(size=32) }}<br>
+						{{ form.personal_number_customer(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.personal_number_customer.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 				</div>

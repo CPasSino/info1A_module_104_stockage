@@ -7,7 +7,7 @@
 			<p>
 				Modèle
 			</p>
-            <table class="table table-bordered table-sm">
+            <table class="table table-responsive-sm table-sm">
             {% if data %}
                 <thead>
                     <tr>
@@ -55,10 +55,10 @@
 							{{ row.description_model }}
 						</td>
 						<td class="text-center" class="align-middle">
-							<a class="btn btn-warning" href="{{ url_for('model_edit', id = row.id_model) }}" role="button">Edit</a>
+							<a class="btn btn-outline-warning" href="{{ url_for('model_edit', id = row.id_model) }}" role="button">Edit</a>
 						</td>
 						<td class="text-center" class="align-middle">
-							<a class="btn btn-danger" href="{{ url_for('model_delete', id = row.id_model) }}" role="button">Delete</a>
+							<a class="btn btn-outline-danger" href="{{ url_for('model_delete', id = row.id_model) }}" role="button">Delete</a>
 						</td>
 					</tr>
 				</tbody>
@@ -72,9 +72,9 @@
 				</tbody>
             {% endfor %}
 			</table>
-			<p class="text-center" class="align-left">
-						<a class="btn btn-primary" href="{{ url_for('modele_ajouter') }}" role="button">Ajouter</a>
-			</p>
+			<div class="d-grid gap-2">
+				<a class="btn btn-lg btn-info" type="button" href="{{ url_for('customer_ajouter') }}" role="button">Ajouter</a>
+			</div>
 		</div>
 	</div>
 </div>

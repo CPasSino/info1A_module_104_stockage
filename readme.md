@@ -7,7 +7,7 @@ Module 104 Exercice du 2021.03.24
 * Démarrer le serveur MySql (uwamp ou xamp ou mamp, etc)
 * Dans PyCharm, importer la BD grâce à un "run" du fichier "zzzdemos/1_ImportationDumpSql.py".
   * En cas d'erreurs : ouvrir le fichier ".env" à la racine du projet, contrôler les indications de connexion pour la bd.
-* Puis dans le répertoire racine du projet, ouvrir le fichier "1_run_server_flask.py" et faire un "run".
+* Dédi de rv Puis dans le répertoire racine du projet, ouvrir le fichier "1_run_server_flask.py" et faire un "run".
 * Choisir le menu "Genres".
 * Cliquez sur le bouton "AJOUTER"
 * Tester différentes valeurs afin de provoquer des erreurs. (Chiffres, carac. spéciaux par exemple)

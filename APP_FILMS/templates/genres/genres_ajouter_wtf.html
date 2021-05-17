@@ -13,23 +13,23 @@
 				<div class="form-group">
 					<p>
 						{{ form.sn.label }}<br>
-						{{ form.sn(size=32) }}<br>
+						{{ form.sn(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.sn.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.fk_model.label }}<br>
-						{{ form.fk_model(size=32) }}<br>
+						{{ form.fk_model(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.fk_model.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.fk_status.label }}<br>
-						{{ form.fk_status(size=32) }}<br>
+						{{ form.fk_status(size=32 , class="form-control form-control-lg") }}<br>
 						{% for error in form.fk_status.errors %}
-							<span style="color: red;">[{{ error }}]</span>
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 				</div>
