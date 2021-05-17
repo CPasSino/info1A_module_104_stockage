@@ -276,181 +276,204 @@ def customers_afficher(order_by, id_customer):
 def genre_ajouter():
     form = FormDevices()
     if request.method == "POST":
-        try:
+        if form.validate_on_submit() and request.form.getlist('model')[0] and request.form.getlist('status')[0] != 'placeholder':
             try:
-                MaBaseDeDonnee().connexion_bd.ping(False)
+                try:
+                    MaBaseDeDonnee().connexion_bd.ping(False)
 
-            except Exception as erreur:
-                flash("Il faut connecter une base de données", "danger")
-                raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+                except Exception as erreur:
+                    flash("Il faut connecter une base de données", "danger")
+                    raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
-            if form.validate_on_submit():
-                strsql_insert_genre = f"""INSERT INTO t_device (id_device,serial_number_device, fk_model, fk_status) VALUES (NULL,"{form.sn.data.lower()}", {int(form.fk_model.data)}, {int(form.fk_status.data)})"""
-                with MaBaseDeDonnee() as mconn_bd:
-                    mconn_bd.mabd_execute(strsql_insert_genre)
+                if form.validate_on_submit():
+                    strsql_insert_genre = f"""INSERT INTO t_device (id_device,serial_number_device, fk_model, fk_status) VALUES (NULL,"{form.sn.data.lower()}", "{int(request.form.getlist('model')[0])}", "{int(request.form.getlist('status')[0])}")"""
+                    with MaBaseDeDonnee() as mconn_bd:
+                        mconn_bd.mabd_execute(strsql_insert_genre)
 
-                flash(f"Données insérées !!", "success")
-                print(f"Données insérées !!")
+                    flash(f"Données insérées !!", "success")
+                    print(f"Données insérées !!")
 
-                return redirect(url_for('device_afficher', order_by='DESC', id_device=0))
+                    return redirect(url_for('device_afficher', order_by='DESC', id_device=0))
 
-        except pymysql.err.IntegrityError as erreur_genre_doublon:
-            code, msg = erreur_genre_doublon.args
-            flash(f"{error_codes.get(code, msg)} ", "warning")
+            except pymysql.err.IntegrityError as erreur_genre_doublon:
+                code, msg = erreur_genre_doublon.args
+                flash(f"{error_codes.get(code, msg)} ", "warning")
 
-        except (pymysql.err.OperationalError,
-                pymysql.ProgrammingError,
-                pymysql.InternalError,
-                TypeError) as erreur_gest_genr_crud:
-            code, msg = erreur_gest_genr_crud.args
+            except (pymysql.err.OperationalError,
+                    pymysql.ProgrammingError,
+                    pymysql.InternalError,
+                    TypeError) as erreur_gest_genr_crud:
+                code, msg = erreur_gest_genr_crud.args
 
-            flash(f"{error_codes.get(code, msg)} ", "danger")
-            flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
-                  f"{erreur_gest_genr_crud.args[0]} , "
-                  f"{erreur_gest_genr_crud}", "danger")
+                flash(f"{error_codes.get(code, msg)} ", "danger")
+                flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
+                      f"{erreur_gest_genr_crud.args[0]} , "
+                      f"{erreur_gest_genr_crud}", "danger")
 
-    try:
-        MaBaseDeDonnee().connexion_bd.ping(False)
+                try:
+                    MaBaseDeDonnee().connexion_bd.ping(False)
 
-    except Exception as erreur:
-        flash("Il faut connecter une base de données", "danger")
-        raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+                except Exception as erreur:
+                    flash("Il faut connecter une base de données", "danger")
+                    raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
-    strsql_getfk = f"""SELECT id_model, name_model FROM t_model"""
-    with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
-        mconn_bd.execute(strsql_getfk)
+    strsql_insert_genre = f"""SELECT id_model, name_model FROM t_model """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        modeles = mc_afficher.fetchall()
 
-    choices = []
+    strsql_insert_genre = f"""SELECT id_status, name_status FROM t_status """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        status = mc_afficher.fetchall()
 
-    for dict in reversed(mconn_bd.fetchall()):
-        choices.append((dict['id_model'], dict['name_model']))
-
-    models = SelectField(u'Selectionner un modèle', choices=choices)
-    print(type(SelectField()))
-
-    return render_template("genres/genres_ajouter_wtf.html", form=form, models=models)
+    return render_template("genres/genres_ajouter_wtf.html", form=form, modeles=modeles, status=status)
 
 
 @obj_mon_application.route("/customer_ajouter", methods=['GET', 'POST'])
 def customer_ajouter():
     form = FormCustomers()
     if request.method == "POST":
-        try:
+        if form.validate_on_submit() and request.form.getlist('secteur')[0] != 'placeholder':
+            print(int(request.form.getlist('secteur')[0]))
             try:
-                MaBaseDeDonnee().connexion_bd.ping(False)
+                try:
+                    MaBaseDeDonnee().connexion_bd.ping(False)
 
-            except Exception as erreur:
-                flash("Il faut connecter une base de données", "danger")
-                raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+                except Exception as erreur:
+                    flash("Il faut connecter une base de données", "danger")
+                    raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
-            if form.validate_on_submit():
-                strsql_insert_genre = f"""INSERT INTO t_customer (id_customer, first_name_customer, last_name_customer, fk_sector, phone_customer, personal_number_customer, location_customer) 
-                                         VALUES (NULL,"{form.first_name.data.lower()}", "{form.last_name.data.lower()}", "{int(form.sector.data)}", "{int(form.location.data)}", "{int(form.phone_customer.data)}", "{int(form.personal_number_customer.data)}")"""
-                with MaBaseDeDonnee() as mconn_bd:
-                    mconn_bd.mabd_execute(strsql_insert_genre)
+                if form.validate_on_submit():
+                    strsql_insert_genre = f"""INSERT INTO t_customer (id_customer, first_name_customer, last_name_customer, fk_sector, phone_customer, personal_number_customer, location_customer) 
+                                             VALUES (NULL,"{form.first_name.data.lower()}", "{form.last_name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{(form.location.data)}", "{int(form.phone_customer.data)}", "{int(form.personal_number_customer.data)}")"""
+                    with MaBaseDeDonnee() as mconn_bd:
+                        mconn_bd.mabd_execute(strsql_insert_genre)
 
-                flash(f"Données insérées !!", "success")
-                print(f"Données insérées !!")
+                    flash(f"Données insérées !!", "success")
+                    print(f"Données insérées !!")
 
-                return redirect(url_for('customers_afficher', order_by='DESC', id_customer=0))
+                    return redirect(url_for('customers_afficher', order_by='DESC', id_customer=0))
 
-        except pymysql.err.IntegrityError as erreur_genre_doublon:
-            code, msg = erreur_genre_doublon.args
+            except pymysql.err.IntegrityError as erreur_genre_doublon:
+                code, msg = erreur_genre_doublon.args
 
-            flash(f"{error_codes.get(code, msg)} ", "warning")
+                flash(f"{error_codes.get(code, msg)} ", "warning")
 
-        except (pymysql.err.OperationalError,
-                pymysql.ProgrammingError,
-                pymysql.InternalError,
-                TypeError) as erreur_gest_genr_crud:
-            code, msg = erreur_gest_genr_crud.args
+            except (pymysql.err.OperationalError,
+                    pymysql.ProgrammingError,
+                    pymysql.InternalError,
+                    TypeError) as erreur_gest_genr_crud:
+                code, msg = erreur_gest_genr_crud.args
 
-            flash(f"{error_codes.get(code, msg)} ", "danger")
-            flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
-                  f"{erreur_gest_genr_crud.args[0]} , "
-                  f"{erreur_gest_genr_crud}", "danger")
+                flash(f"{error_codes.get(code, msg)} ", "danger")
+                flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
+                      f"{erreur_gest_genr_crud.args[0]} , "
+                      f"{erreur_gest_genr_crud}", "danger")
 
-    return render_template("genres/customers_ajouter.html", form=form)
+    strsql_insert_genre = f"""SELECT id_sector, name_sector FROM t_sector """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        secteurs = mc_afficher.fetchall()
+
+    return render_template("genres/customers_ajouter.html", form=form, secteurs=secteurs)
 
 
 @obj_mon_application.route("/modele_ajouter", methods=['GET', 'POST'])
 def modele_ajouter():
     form = FormModels()
     if request.method == "POST":
-        try:
+        if form.validate_on_submit() and request.form.getlist('secteur')[0] != 'placeholder':
             try:
-                MaBaseDeDonnee().connexion_bd.ping(False)
+                try:
+                    MaBaseDeDonnee().connexion_bd.ping(False)
 
-            except Exception as erreur:
-                flash("Il faut connecter une base de données", "danger")
-                raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+                except Exception as erreur:
+                    flash("Il faut connecter une base de données", "danger")
+                    raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
-            if form.validate_on_submit():
-                strsql_insert_genre = f"""INSERT INTO t_model (id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model) VALUES (NULL,"{form.name.data.lower()}", "{int(form.fk_sector.data.lower())}", "{form.bought_date_model.data}", "{form.guarantee_date_model.data}", "{form.description_model.data.lower()}")"""
-                with MaBaseDeDonnee() as mconn_bd:
-                    mconn_bd.mabd_execute(strsql_insert_genre)
+                if form.validate_on_submit():
+                    strsql_insert_genre = f"""INSERT INTO t_model (id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model) VALUES (NULL,"{form.name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{form.bought_date_model.data}", "{form.guarantee_date_model.data}", "{form.description_model.data.lower()}")"""
+                    with MaBaseDeDonnee() as mconn_bd:
+                        mconn_bd.mabd_execute(strsql_insert_genre)
 
-                flash(f"Données insérées !!", "success")
-                print(f"Données insérées !!")
+                    flash(f"Données insérées !!", "success")
+                    print(f"Données insérées !!")
 
-                return redirect(url_for('modele_afficher', order_by='DESC', id_modele=0))
+                    return redirect(url_for('modele_afficher', order_by='DESC', id_modele=0))
 
-        except pymysql.err.IntegrityError as erreur_genre_doublon:
-            code, msg = erreur_genre_doublon.args
-            flash(f"{error_codes.get(code, msg)} ", "warning")
+            except pymysql.err.IntegrityError as erreur_genre_doublon:
+                code, msg = erreur_genre_doublon.args
+                flash(f"{error_codes.get(code, msg)} ", "warning")
 
-        except (pymysql.err.OperationalError,
-                pymysql.ProgrammingError,
-                pymysql.InternalError,
-                TypeError) as erreur_gest_genr_crud:
-            code, msg = erreur_gest_genr_crud.args
-            code, msg = erreur_gest_genr_crud.args
-            flash(f"{error_codes.get(code, msg)} ", "danger")
-            flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
-                  f"{erreur_gest_genr_crud.args[0]} , "
-                  f"{erreur_gest_genr_crud}", "danger")
+            except (pymysql.err.OperationalError,
+                    pymysql.ProgrammingError,
+                    pymysql.InternalError,
+                    TypeError) as erreur_gest_genr_crud:
+                code, msg = erreur_gest_genr_crud.args
+                code, msg = erreur_gest_genr_crud.args
+                flash(f"{error_codes.get(code, msg)} ", "danger")
+                flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
+                      f"{erreur_gest_genr_crud.args[0]} , "
+                      f"{erreur_gest_genr_crud}", "danger")
 
-    return render_template("genres/modele_ajouter.html", form=form)
+    strsql_insert_genre = f"""SELECT id_sector, name_sector FROM t_sector """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        secteurs = mc_afficher.fetchall()
+
+    return render_template("genres/modele_ajouter.html", form=form, secteurs=secteurs)
 
 
 @obj_mon_application.route("/use_ajouter", methods=['GET', 'POST'])
 def use_ajouter():
     form = FormUse()
     if request.method == "POST":
-        try:
+        if form.validate_on_submit() and request.form.getlist('device')[0] and request.form.getlist('customer')[0] != 'placeholder':
             try:
-                MaBaseDeDonnee().connexion_bd.ping(False)
+                try:
+                    MaBaseDeDonnee().connexion_bd.ping(False)
 
-            except Exception as erreur:
-                flash("Il faut connecter une base de données", "danger")
-                raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+                except Exception as erreur:
+                    flash("Il faut connecter une base de données", "danger")
+                    raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
-            if form.validate_on_submit():
-                strsql_insert_genre = f"""INSERT INTO t_use (id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use) 
-                                        VALUES (NULL,{int(form.fk_device.data)}, {int(form.fk_customer.data)}, "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data.lower()}")"""
-                with MaBaseDeDonnee() as mconn_bd:
-                    mconn_bd.mabd_execute(strsql_insert_genre)
+                if form.validate_on_submit():
+                    strsql_insert_genre = f"""INSERT INTO t_use (id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use) 
+                                            VALUES (NULL,"{int(request.form.getlist('device')[0])}", "{int(request.form.getlist('customer')[0])}", "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data.lower()}")"""
+                    with MaBaseDeDonnee() as mconn_bd:
+                        mconn_bd.mabd_execute(strsql_insert_genre)
 
-                flash(f"Données insérées !!", "success")
-                print(f"Données insérées !!")
+                    flash(f"Données insérées !!", "success")
+                    print(f"Données insérées !!")
 
-                return redirect(url_for('use_afficher', order_by='DESC', id_use=0))
+                    return redirect(url_for('use_afficher', order_by='DESC', id_use=0))
 
-        except pymysql.err.IntegrityError as erreur_genre_doublon:
-            code, msg = erreur_genre_doublon.args
-            flash(f"{error_codes.get(code, msg)} ", "warning")
+            except pymysql.err.IntegrityError as erreur_genre_doublon:
+                code, msg = erreur_genre_doublon.args
+                flash(f"{error_codes.get(code, msg)} ", "warning")
 
-        except (pymysql.err.OperationalError,
-                pymysql.ProgrammingError,
-                pymysql.InternalError,
-                TypeError) as erreur_gest_genr_crud:
-            msg = erreur_gest_genr_crud.args
-            flash(f"{error_codes.get(msg)} ", "danger")
-            flash(f"Erreur dans Gestion genres CRUD "
-                  f"{erreur_gest_genr_crud.args[0]} , "
-                  f"{erreur_gest_genr_crud}", "danger")
+            except (pymysql.err.OperationalError,
+                    pymysql.ProgrammingError,
+                    pymysql.InternalError,
+                    TypeError) as erreur_gest_genr_crud:
+                msg = erreur_gest_genr_crud.args
+                flash(f"{error_codes.get(msg)} ", "danger")
+                flash(f"Erreur dans Gestion genres CRUD "
+                      f"{erreur_gest_genr_crud.args[0]} , "
+                      f"{erreur_gest_genr_crud}", "danger")
 
-    return render_template("genres/use_ajouter.html", form=form)
+    strsql_insert_genre = f"""SELECT id_device, serial_number_device FROM t_device """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        device = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT id_customer, first_name_customer, last_name_customer FROM t_customer """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        customer = mc_afficher.fetchall()
+
+    return render_template("genres/use_ajouter.html", form=form, device=device, customer=customer)
 
 
 @obj_mon_application.route("/sector_ajouter", methods=['GET', 'POST'])
@@ -495,8 +518,8 @@ def sector_ajouter():
 
 @obj_mon_application.route("/statut_ajouter", methods=['GET', 'POST'])
 def status_ajouter():
-    form = FormStatus()
-    if request.method == "POST":
+     form = FormStatus()
+     if request.method == "POST":
         try:
             try:
                 MaBaseDeDonnee().connexion_bd.ping(False)
@@ -526,11 +549,11 @@ def status_ajouter():
             code, msg = erreur_gest_genr_crud.args
 
             flash(f"{error_codes.get(code, msg)} ", "danger")
-            flash(f"Erreur dans Gestion genres CRUD : {sys.exc_info()[0]} "
+            flash(f"Erreur dans Gestion genres CRUD : "
                   f"{erreur_gest_genr_crud.args[0]} , "
                   f"{erreur_gest_genr_crud}", "danger")
 
-    return render_template("genres/statut_ajouter.html", form=form)
+     return render_template("genres/statut_ajouter.html", form=form)
 
 
 @obj_mon_application.route('/genre_delete/<int:id>', methods=['GET', 'POST'])
@@ -716,7 +739,28 @@ def genre_edit(id):
             flash(f"RGG Exception {erreur}")
             raise Exception(f"RGG Erreur générale. {erreur}")
 
-    return render_template("genres/genres_ajouter_wtf.html", form=form)
+    strsql_insert_genre = f"""SELECT id_model, name_model FROM t_model """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        modeles = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT fk_model FROM t_device WHERE id_device = {id} """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        used_modeles = mc_afficher.fetchone()
+
+    strsql_insert_genre = f"""SELECT id_status, name_status FROM t_status """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        status = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT fk_status FROM t_device WHERE id_device = {id} """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        used_status = mc_afficher.fetchone()
+
+
+    return render_template("genres/device_edit.html", form=form, modeles=modeles, status=status, used_modeles=used_modeles, used_status=used_status)
 
 
 @obj_mon_application.route('/customer_edit/<int:id>', methods=['GET', 'POST'])
@@ -746,7 +790,17 @@ def customer_edit(id):
             flash(f"RGG Exception {erreur}")
             raise Exception(f"RGG Erreur générale. {erreur}")
 
-    return render_template("genres/customers_ajouter.html", form=form)
+    strsql_insert_genre = f"""SELECT id_sector, name_sector FROM t_sector """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        secteurs = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT fk_sector FROM t_customer WHERE id_customer = {id} """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        used_secteurs = mc_afficher.fetchall()
+
+    return render_template("genres/customer_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs)
 
 
 @obj_mon_application.route('/model_edit/<int:id>', methods=['GET', 'POST'])
@@ -776,7 +830,17 @@ def model_edit(id):
             flash(f"RGG Exception {erreur}")
             raise Exception(f"RGG Erreur générale. {erreur}")
 
-    return render_template("genres/modele_ajouter.html", form=form)
+    strsql_insert_genre = f"""SELECT id_sector, name_sector FROM t_sector """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        secteurs = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT fk_sector FROM t_model WHERE id_model = {id} """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        used_secteurs = mc_afficher.fetchone()
+
+    return render_template("genres/modele_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs)
 
 
 @obj_mon_application.route('/use_edit/<int:id>', methods=['GET', 'POST'])
@@ -806,7 +870,27 @@ def use_edit(id):
             flash(f"RGG Exception {erreur}")
             raise Exception(f"RGG Erreur générale. {erreur}")
 
-    return render_template("genres/use_ajouter.html", form=form)
+    strsql_insert_genre = f"""SELECT id_device, serial_number_device FROM t_device """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        device = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT fk_device FROM t_use WHERE id_start_use = {id} """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        used_device = mc_afficher.fetchone()
+
+    strsql_insert_genre = f"""SELECT id_customer, first_name_customer, last_name_customer FROM t_customer """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        customer = mc_afficher.fetchall()
+
+    strsql_insert_genre = f"""SELECT fk_customer FROM t_use WHERE id_start_use = {id} """
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        used_customer = mc_afficher.fetchone()
+
+    return render_template("genres/use_edit.html", form=form, device=device,used_device=used_device, strsql_insert_genre=strsql_insert_genre, used_customer=used_customer, customer=customer)
 
 
 @obj_mon_application.route('/sector_edit/<int:id>', methods=['GET', 'POST'])

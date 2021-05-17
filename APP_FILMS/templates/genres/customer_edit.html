@@ -28,9 +28,12 @@
 					<div class="form-group">
 						<label for="secteur">Choisis ton Secteur</label>
 						<select class="form-select form-control text-light bg-dark" id="secteur" name="secteur">
-							<option value="placeholder" hidden selected></option>
 							{% for row in secteurs %}
-								<option value="{{ row.id_sector }}">{{ row.name_sector }}</option>
+                              {% if row.id_customer == used_secteurs.fk_customer %}
+								  <option value="{{ row.id_sector }}" selected>{{ row.name_sector }}</option>
+                          {% else %}
+                                  <option value="{{ row.id_sector }}">{{ row.name_sector }}</option>
+                               {% endif %}
 							{% endfor %}
 						</select><br>
 					</div>
@@ -58,6 +61,7 @@
 				</div>
 			</form>
 					<input class="btn btn-outline-info" type="submit" form="form" value="Enegistrer">
+					<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>
 		</div>
 	</div>
 </div>

@@ -21,9 +21,12 @@
 					<div class="form-group">
 						<label for="secteur">Choisis ton secteur</label>
 						<select class="form-select form-control text-light bg-dark" id="secteur" name="secteur">
-							<option value="placeholder" hidden selected></option>
 							{% for row in secteurs %}
+								{% if row.id_model == used_secteurs.fk_model %}
+									<option value="{{ row.id_sector }}"selected >{{ row.name_sector }}</option>
+							{% else %}
 									<option value="{{ row.id_sector }}">{{ row.name_sector }}</option>
+								{% endif %}
 							{% endfor %}
 						</select><br>
 					</div>

@@ -13,14 +13,15 @@
 				<div class="form-group">
 					<p>
 						{{ form.name.label }}<br>
-						{{ form.name(size=32 , class="form-control form-control-lg") }}<br>
+						{{ form.name(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.name.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.name.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 
 				</div>
-				{{ form.submit(class="btn btn-primary") }}
+					{{ form.submit(class="btn btn-outline-primary") }}
+				<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>
 			</form>
 		</div>
 	</div>
