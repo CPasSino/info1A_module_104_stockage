@@ -23,9 +23,9 @@ class Form(Validators, FlaskForm):
 class FormCustomers(Form):
     first_name = StringField("Clavioter le prénom ", validators=Validators().name)
     last_name = StringField("Clavioter le nom de famille ", validators=Validators().name)
-    location = StringField("Clavioter la localisation ", validators=Validators().name)
     phone_customer = StringField("Clavioter le numéro de l'employé ", validators=Validators().fk)
     personal_number_customer = StringField("Clavioter le numéro privé de l'employé ", validators=Validators().fk)
+    location = StringField("Clavioter la localisation ", validators=Validators().name)
 
 
 class FormDevices(Form):

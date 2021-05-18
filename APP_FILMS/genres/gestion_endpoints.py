@@ -23,16 +23,20 @@ def device_afficher(order_by, id_device):
 
             with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
                 if id_device == 0:
-                    strsql_genres_afficher = """SELECT id_device, serial_number_device, fk_model, fk_status FROM t_device ORDER BY id_device ASC"""
+                    strsql_genres_afficher = f"""SELECT id_device, serial_number_device, name_model, name_status 
+                                                    FROM t_device 
+                                                        LEFT JOIN t_model ON id_model = fk_model
+                                                        LEFT JOIN t_status ON id_status = fk_status 
+                                                ORDER BY id_device {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
-                elif order_by == "ASC":
-                    valeur_id_genre_selected_dictionnaire = {"value_id_genre_selected": id_device}
-                    strsql_genres_afficher = """SELECT id_device, serial_number_device, fk_model, fk_status FROM t_device  WHERE id_device = %(value_id_genre_selected)s"""
-                    mc_afficher.execute(strsql_genres_afficher, valeur_id_genre_selected_dictionnaire)
-
                 else:
-                    strsql_genres_afficher = """SELECT id_device, serial_number_device, fk_model, fk_status FROM t_device ORDER BY id_device DESC"""
+                    strsql_genres_afficher = f"""SELECT id_device, serial_number_device, name_model, name_status 
+                                                    FROM t_device  
+                                                        LEFT JOIN t_model ON id_model = fk_model
+                                                        LEFT JOIN t_status ON id_status = fk_status                                                        
+                                                WHERE id_device = {id_device}
+                                                ORDER BY id_device {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 print(type(mc_afficher))
@@ -156,15 +160,18 @@ def modele_afficher(order_by, id_modele):
 
             with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
                 if id_modele == 0:
-                    strsql_genres_afficher = """SELECT id_model, name_model , fk_sector, bought_date_model, guarantee_date_model, description_model FROM t_model ORDER BY id_model ASC"""
+                    strsql_genres_afficher = f"""SELECT id_model, name_model , name_sector, bought_date_model, guarantee_date_model, description_model 
+                                                    FROM t_model 
+                                                        LEFT JOIN t_sector ON id_sector = fk_sector
+                                                ORDER BY id_model {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 elif order_by == "ASC":
-                    strsql_genres_afficher = f"""SELECT id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model  FROM t_model  WHERE id_model = {id_modele}"""
-                    mc_afficher.execute(strsql_genres_afficher)
-
-                else:
-                    strsql_genres_afficher = """SELECT id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model  FROM t_model ORDER BY id_model DESC"""
+                    strsql_genres_afficher = f"""SELECT id_model, name_model, name_sector, bought_date_model, guarantee_date_model, description_model  
+                                                    FROM t_model  
+                                                        LEFT JOIN t_sector ON id_sector = fk_sector
+                                                WHERE id_modele = {id_modele}
+                                                ORDER BY id_modele {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 data_genres = mc_afficher.fetchall()
@@ -199,15 +206,20 @@ def use_afficher(order_by, id_use):
 
             with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
                 if id_use == 0:
-                    strsql_genres_afficher = """SELECT id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use FROM t_use ORDER BY id_start_use ASC"""
-                    mc_afficher.execute(strsql_genres_afficher)
-
-                elif order_by == "ASC":
-                    strsql_genres_afficher = f"""SELECT id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use  FROM t_use  WHERE id_start_use = {id_use}"""
+                    strsql_genres_afficher = f"""SELECT id_start_use, serial_number_device, first_name_customer, last_name_customer, date_start_use, date_end_use, reason_end_use 
+                                                    FROM t_use 
+                                                        LEFT JOIN t_customer ON id_customer = fk_customer 
+                                                        LEFT JOIN t_device ON id_device = fk_device
+                                                ORDER BY id_start_use {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 else:
-                    strsql_genres_afficher = """SELECT id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use  FROM t_use ORDER BY id_start_use DESC"""
+                    strsql_genres_afficher = f"""SELECT id_start_use, serial_number_device, first_name_customer, last_name_customer, date_start_use, date_end_use, reason_end_use 
+                                                    FROM t_use 
+                                                        LEFT JOIN t_customer ON id_customer = fk_customer 
+                                                        LEFT JOIN t_device ON id_device = fk_device
+                                                WHERE id_start_use = {id_use}
+                                                ORDER BY id_start_use {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 data_genres = mc_afficher.fetchall()
@@ -346,7 +358,7 @@ def customer_ajouter():
 
                 if form.validate_on_submit():
                     strsql_insert_genre = f"""INSERT INTO t_customer (id_customer, first_name_customer, last_name_customer, fk_sector, phone_customer, personal_number_customer, location_customer) 
-                                             VALUES (NULL,"{form.first_name.data.lower()}", "{form.last_name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{(form.location.data)}", "{int(form.phone_customer.data)}", "{int(form.personal_number_customer.data)}")"""
+                                             VALUES (NULL,"{form.first_name.data.lower()}", "{form.last_name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{int(form.phone_customer.data)}", "{int(form.personal_number_customer.data)}", "{form.location.data}")"""
                     with MaBaseDeDonnee() as mconn_bd:
                         mconn_bd.mabd_execute(strsql_insert_genre)
 
