@@ -39,14 +39,14 @@
 					</p>
 					<p>
 						{{ form.guarantee_date_model.label }}<br>
-						{{ form.guarantee_date_model(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.guarantee_date_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{{ form.guarantee_date_model(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.guarantee_date_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.guarantee_date_model.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
 					<p>
 						{{ form.description_model.label }}<br>
-						{{ form.description_model(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.description_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{{ form.description_model(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.description_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.description_model.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}

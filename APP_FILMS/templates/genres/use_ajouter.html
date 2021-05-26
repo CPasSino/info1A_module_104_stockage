@@ -38,7 +38,7 @@
 					</p>
 					<p>
 						{{ form.date_end_use.label }}<br>
-						{{ form.date_end_use(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.date_end_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{{ form.date_end_use(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.date_end_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.date_end_use.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
