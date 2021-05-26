@@ -28,6 +28,9 @@
 						<th class="align-middle">
                             Description
                         </th>
+						<th class="align-middle">
+                            Quand t'y T
+                        </th>
 
                     </tr>
                 </thead>
@@ -53,6 +56,10 @@
 						</td>
 						<td class="align-middle">
 							{{ row.description_model }}
+						</td>
+
+						<td class="align-middle">
+							{{ row.quantite_model }}
 						</td>
 						<td class="text-center" class="align-middle">
 							<a class="btn btn-outline-warning" href="{{ url_for('model_edit', id = row.id_model) }}" role="button">Edit</a>

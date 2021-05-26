@@ -52,6 +52,14 @@
 						{% endfor %}
 					</p>
 
+					<p>
+						{{ form.quantite.label }}<br>
+						{{ form.quantite(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.quantite.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{% for error in form.quantite.errors %}
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+						{% endfor %}
+					</p>
+
 				</div>
 					<input class="btn btn-outline-info" type="submit" form="form" value="Enegistrer">
 				<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>

@@ -7,7 +7,7 @@
 			<p>
 				Ajouter un nouvel enregistrement
 			</p>
-			<form id="form" action="{{ url_for('use_ajouter') }}" method="POST" novalidate>
+			<form id="form" action="{{ url_for('use_edit', id=id) }}" method="POST" novalidate>
 				<!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
 				{{ form.hidden_tag() }}
 				<div class="form-group">

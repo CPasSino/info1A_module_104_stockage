@@ -16,7 +16,7 @@
 						<select class="form-select form-control text-light bg-dark" id="device" name="device">
 							<option value="placeholder" hidden selected></option>
 							{% for row in device %}
-									<option value="{{ row.id_device }}" >{{ row.serial_number_device }}</option>
+									<option value="{{ row.id_model }}" >{{ row.name_model }}</option>
 							{% endfor %}
 						</select><br>
 					</div>
@@ -31,7 +31,7 @@
 					</div>
 					<p>
 						{{ form.date_start_use.label }}<br>
-						{{ form.date_start_use(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.date_start_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{{ form.date_start_use(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.date_start_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.date_start_use.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}

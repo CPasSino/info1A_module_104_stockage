@@ -9,6 +9,8 @@ from APP_FILMS import obj_mon_application
 from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.erreurs.exceptions import *
 
+from APP_FILMS.database.connect_db_context_manager import MaBaseDeDonnee
+
 
 @obj_mon_application.route('/index')
 def index():
@@ -18,7 +20,18 @@ def index():
 @obj_mon_application.route('/')
 @obj_mon_application.route('/homepage')
 def mapagepricipale():
-    return render_template("home.html")
+    strsql_insert_genre = f""" SELECT name_model                                                                                                             sn,
+                                      (SELECT COUNT(id_start_use) FROM t_use LEFT JOIN t_device ON id_device = fk_device WHERE fk_model  = id_model)       used,
+                                      quantite_model                                                                                                             free
+                                        
+                                  FROM t_model
+                                    """
+
+    with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+        mc_afficher.execute(strsql_insert_genre)
+        data = mc_afficher.fetchall()
+
+    return render_template("home.html", data=data)
 
 
 @obj_mon_application.route('/essai')

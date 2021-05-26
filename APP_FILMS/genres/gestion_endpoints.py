@@ -23,7 +23,7 @@ def device_afficher(order_by, id_device):
 
             with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
                 if id_device == 0:
-                    strsql_genres_afficher = f"""SELECT id_device, serial_number_device, name_model, name_status 
+                    strsql_genres_afficher = f"""SELECT id_device, serial_number_device, name_model, name_status
                                                     FROM t_device 
                                                         LEFT JOIN t_model ON id_model = fk_model
                                                         LEFT JOIN t_status ON id_status = fk_status 
@@ -31,7 +31,7 @@ def device_afficher(order_by, id_device):
                     mc_afficher.execute(strsql_genres_afficher)
 
                 else:
-                    strsql_genres_afficher = f"""SELECT id_device, serial_number_device, name_model, name_status 
+                    strsql_genres_afficher = f"""SELECT id_device, serial_number_device, name_model, name_status
                                                     FROM t_device  
                                                         LEFT JOIN t_model ON id_model = fk_model
                                                         LEFT JOIN t_status ON id_status = fk_status                                                        
@@ -160,14 +160,14 @@ def modele_afficher(order_by, id_modele):
 
             with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
                 if id_modele == 0:
-                    strsql_genres_afficher = f"""SELECT id_model, name_model , name_sector, bought_date_model, guarantee_date_model, description_model 
+                    strsql_genres_afficher = f"""SELECT id_model, name_model , name_sector, bought_date_model, guarantee_date_model, description_model, quantite_model 
                                                     FROM t_model 
                                                         LEFT JOIN t_sector ON id_sector = fk_sector
                                                 ORDER BY id_model {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 elif order_by == "ASC":
-                    strsql_genres_afficher = f"""SELECT id_model, name_model, name_sector, bought_date_model, guarantee_date_model, description_model  
+                    strsql_genres_afficher = f"""SELECT id_model, name_model, name_sector, bought_date_model, guarantee_date_model, description_model, quantite_model   
                                                     FROM t_model  
                                                         LEFT JOIN t_sector ON id_sector = fk_sector
                                                 WHERE id_modele = {id_modele}
@@ -217,7 +217,8 @@ def use_afficher(order_by, id_use):
                     strsql_genres_afficher = f"""SELECT id_start_use, serial_number_device, first_name_customer, last_name_customer, date_start_use, date_end_use, reason_end_use 
                                                     FROM t_use 
                                                         LEFT JOIN t_customer ON id_customer = fk_customer 
-                                                        LEFT JOIN t_device ON id_device = fk_device
+                                                        LEFT JOIN 
+                                                        ON id_device = fk_device
                                                 WHERE id_start_use = {id_use}
                                                 ORDER BY id_start_use {order_by}"""
                     mc_afficher.execute(strsql_genres_afficher)
@@ -288,7 +289,7 @@ def customers_afficher(order_by, id_customer):
 def genre_ajouter():
     form = FormDevices()
     if request.method == "POST":
-        if form.validate_on_submit() and request.form.getlist('model')[0] and request.form.getlist('status')[0] != 'placeholder':
+        if form.validate_on_submit() and request.form.getlist('modeles')[0] and request.form.getlist('status')[0] != 'placeholder':
             try:
                 try:
                     MaBaseDeDonnee().connexion_bd.ping(False)
@@ -298,7 +299,11 @@ def genre_ajouter():
                     raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
                 if form.validate_on_submit():
-                    strsql_insert_genre = f"""INSERT INTO t_device (id_device,serial_number_device, fk_model, fk_status) VALUES (NULL,"{form.sn.data.lower()}", "{int(request.form.getlist('model')[0])}", "{int(request.form.getlist('status')[0])}")"""
+                    strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model + 1 WHERE id_model = {request.form.getlist('modeles')[0]}"""
+                    with MaBaseDeDonnee() as mconn_bd:
+                        mconn_bd.mabd_execute(strsql_insert_genre)
+
+                    strsql_insert_genre = f"""INSERT INTO t_device (id_device,serial_number_device, fk_model, fk_status) VALUES (NULL,"{form.sn.data.lower()}", "{request.form.getlist('modeles')[0]}", "{request.form.getlist('status')[0]}")"""
                     with MaBaseDeDonnee() as mconn_bd:
                         mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -404,15 +409,14 @@ def modele_ajouter():
                     flash("Il faut connecter une base de données", "danger")
                     raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
-                if form.validate_on_submit():
-                    strsql_insert_genre = f"""INSERT INTO t_model (id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model) VALUES (NULL,"{form.name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{form.bought_date_model.data}", "{form.guarantee_date_model.data}", "{form.description_model.data.lower()}")"""
-                    with MaBaseDeDonnee() as mconn_bd:
-                        mconn_bd.mabd_execute(strsql_insert_genre)
+                strsql_insert_genre = f"""INSERT INTO t_model (id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model, quantite_model) VALUES (NULL,"{form.name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{form.bought_date_model.data}", "{form.guarantee_date_model.data}", "{form.description_model.data.lower()}", 0)"""
+                with MaBaseDeDonnee() as mconn_bd:
+                    mconn_bd.mabd_execute(strsql_insert_genre)
 
-                    flash(f"Données insérées !!", "success")
-                    print(f"Données insérées !!")
+                flash(f"Données insérées !!", "success")
+                print(f"Données insérées !!")
 
-                    return redirect(url_for('modele_afficher', order_by='DESC', id_modele=0))
+                return redirect(url_for('modele_afficher', order_by='DESC', id_modele=0))
 
             except pymysql.err.IntegrityError as erreur_genre_doublon:
                 code, msg = erreur_genre_doublon.args
@@ -451,8 +455,13 @@ def use_ajouter():
                     raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
                 if form.validate_on_submit():
+
                     strsql_insert_genre = f"""INSERT INTO t_use (id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use) 
-                                            VALUES (NULL,"{int(request.form.getlist('device')[0])}", "{int(request.form.getlist('customer')[0])}", "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data.lower()}")"""
+                                            VALUES (NULL,(SELECT id_device FROM t_device WHERE fk_model = {int(request.form.getlist('device')[0])} LIMIT 1), "{int(request.form.getlist('customer')[0])}", "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data}")"""
+                    with MaBaseDeDonnee() as mconn_bd:
+                        mconn_bd.mabd_execute(strsql_insert_genre)
+
+                    strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model - 1 WHERE id_model = {request.form.getlist('device')[0]}"""
                     with MaBaseDeDonnee() as mconn_bd:
                         mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -475,7 +484,7 @@ def use_ajouter():
                       f"{erreur_gest_genr_crud.args[0]} , "
                       f"{erreur_gest_genr_crud}", "danger")
 
-    strsql_insert_genre = f"""SELECT id_device, serial_number_device FROM t_device """
+    strsql_insert_genre = f"""SELECT id_model, name_model FROM t_model WHERE quantite_model > 0 """
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
         device = mc_afficher.fetchall()
@@ -530,8 +539,8 @@ def sector_ajouter():
 
 @obj_mon_application.route("/statut_ajouter", methods=['GET', 'POST'])
 def status_ajouter():
-     form = FormStatus()
-     if request.method == "POST":
+    form = FormStatus()
+    if request.method == "POST":
         try:
             try:
                 MaBaseDeDonnee().connexion_bd.ping(False)
@@ -565,7 +574,7 @@ def status_ajouter():
                   f"{erreur_gest_genr_crud.args[0]} , "
                   f"{erreur_gest_genr_crud}", "danger")
 
-     return render_template("genres/statut_ajouter.html", form=form)
+    return render_template("genres/statut_ajouter.html", form=form)
 
 
 @obj_mon_application.route('/genre_delete/<int:id>', methods=['GET', 'POST'])
@@ -578,6 +587,10 @@ def genre_delete(id):
             except Exception as erreur:
                 flash("Il faut connecter une base de données", "danger")
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+
+            strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model - 1 WHERE id_model = (SELECT fk_model FROM t_device WHERE id_device = {id})"""
+            with MaBaseDeDonnee() as mconn_bd:
+                mconn_bd.mabd_execute(strsql_insert_genre)
 
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_device WHERE id_device = {id}"""
@@ -656,6 +669,12 @@ def use_delete(id):
             except Exception as erreur:
                 flash("Il faut connecter une base de données", "danger")
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
+
+            strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model + 1 WHERE id_model = (SELECT fk_model FROM t_device WHERE id_device = (SELECT fk_device FROM t_use WHERE id_start_use = {id}))"""
+
+            print(strsql_insert_genre)
+            with MaBaseDeDonnee() as mconn_bd:
+                mconn_bd.mabd_execute(strsql_insert_genre)
 
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_use WHERE id_start_use = {id}"""
@@ -737,13 +756,19 @@ def genre_edit(id):
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
+                strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model + 1 WHERE id_model = (SELECT fk_model FROM t_device WHERE id_device = {id})"""
+                with MaBaseDeDonnee() as mconn_bd:
+                    mconn_bd.mabd_execute(strsql_insert_genre)
+
+                strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model - 1 WHERE id_model = {(int(form.fk_model.data))}"""
+                with MaBaseDeDonnee() as mconn_bd:
+                    mconn_bd.mabd_execute(strsql_insert_genre)
                 strsql_insert_genre = f"""UPDATE t_device SET serial_number_device = "{form.sn.data.lower()}", fk_model = {(int(form.fk_model.data))}, fk_status = {(int(form.fk_status.data))} WHERE id_device = {id}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
                 flash(f"Données mises à jour !!", "success")
                 print(f"Données mises à jour !!")
-
 
                 return redirect(url_for('device_afficher', order_by='ASC', id_device=0))
         except Exception as erreur:
@@ -770,7 +795,6 @@ def genre_edit(id):
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
         used_status = mc_afficher.fetchone()
-
 
     return render_template("genres/device_edit.html", form=form, modeles=modeles, status=status, used_modeles=used_modeles, used_status=used_status)
 
@@ -828,7 +852,7 @@ def model_edit(id):
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
-                strsql_insert_genre = f"""UPDATE t_model SET name_model = "{form.name.data.lower()}", fk_sector = "{int(form.fk_sector.data)}", bought_date_model = "{(form.bought_date_model.data)}", guarantee_date_model = "{(form.guarantee_date_model.data)}", description_model = "{(form.description_model.data.lower())}" WHERE id_model = {id}"""
+                strsql_insert_genre = f"""UPDATE t_model SET name_model = "{form.name.data.lower()}", fk_sector = "{int(form.fk_sector.data)}", bought_date_model = "{(form.bought_date_model.data)}", guarantee_date_model = "{(form.guarantee_date_model.data)}", description_model = "{(form.description_model.data.lower())}", quantite_model={form.quantite.data} WHERE id_model = {id}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -868,7 +892,18 @@ def use_edit(id):
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
-                strsql_insert_genre = f"""UPDATE t_use SET fk_device = "{form.fk_device.data.lower()}", fk_customer = "{(form.fk_customer.data.lower())}", date_start_use = "{(form.date_start_use.data)}", date_end_use = "{(form.date_end_use.data)}", reason_end_use = "{(form.reason_end_use.data.lower())}" WHERE id_start_use = {id}"""
+                strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model + 1 WHERE id_model = (SELECT fk_model FROM t_device WHERE id_device = (SELECT fk_device FROM t_use WHERE id_start_use = {id}))"""
+
+                print(strsql_insert_genre)
+                with MaBaseDeDonnee() as mconn_bd:
+                    mconn_bd.mabd_execute(strsql_insert_genre)
+
+                strsql_insert_genre = f"""UPDATE t_use SET fk_device = "{request.form.getlist('device')[0]}", fk_customer = "{request.form.getlist('customer')[0]}", date_start_use = "{(form.date_start_use.data)}", date_end_use = "{(form.date_end_use.data)}", reason_end_use = "{(form.reason_end_use.data.lower())}" WHERE id_start_use = {id}"""
+                with MaBaseDeDonnee() as mconn_bd:
+                    mconn_bd.mabd_execute(strsql_insert_genre)
+
+                strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model - 1 WHERE id_model = (SELECT fk_model FROM t_device WHERE id_device = {request.form.getlist('device')[0]})"""
+
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -882,7 +917,7 @@ def use_edit(id):
             flash(f"RGG Exception {erreur}")
             raise Exception(f"RGG Erreur générale. {erreur}")
 
-    strsql_insert_genre = f"""SELECT id_device, serial_number_device FROM t_device """
+    strsql_insert_genre = f"""SELECT id_device, serial_number_device FROM t_device LEFT JOIN t_model ON id_model = fk_model WHERE quantite_model > 0"""
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
         device = mc_afficher.fetchall()
@@ -902,7 +937,8 @@ def use_edit(id):
         mc_afficher.execute(strsql_insert_genre)
         used_customer = mc_afficher.fetchone()
 
-    return render_template("genres/use_edit.html", form=form, device=device,used_device=used_device, strsql_insert_genre=strsql_insert_genre, used_customer=used_customer, customer=customer)
+    return render_template("genres/use_edit.html", form=form, device=device, used_device=used_device,
+                           strsql_insert_genre=strsql_insert_genre, used_customer=used_customer, customer=customer, id=id)
 
 
 @obj_mon_application.route('/sector_edit/<int:id>', methods=['GET', 'POST'])

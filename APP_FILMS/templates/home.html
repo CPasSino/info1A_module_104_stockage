@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 {% block title %} Homepage FILMS {% endblock %}
 {% block body %}
-<div class="container-fluid">
+<div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h3>
-				Wooaw
-			</h3>
+			{% for row in data %}
+
+			<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: {{ 100 / (row.free + row.used) * row.free if row.free > 0 else 0}}%;"></div>
+			</div>
 			<p>
-				L'inspiii part... et reviens.. pis repart..
+				{{ row.sn }} : {{ 100 / (row.free + row.used) * row.free if row.free > 0 else 0}} %
 			</p>
+
+			{% endfor %}
 		</div>
 	</div>
 </div>

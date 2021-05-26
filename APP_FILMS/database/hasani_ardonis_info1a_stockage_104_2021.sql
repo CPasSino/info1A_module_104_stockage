@@ -76,7 +76,8 @@ CREATE TABLE `t_model` (
   `fk_sector` int(11) NOT NULL,
   `bought_date_model` date NOT NULL,
   `guarantee_date_model` date NOT NULL,
-  `description_model` varchar(100) NOT NULL
+  `description_model` varchar(100) NOT NULL,
+  `quantite_model` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
