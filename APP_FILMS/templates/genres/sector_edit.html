@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %} Ajouter un GENRE (WTF) {% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<p>
+				Ajouter un nouvel enregistrement
+			</p>
+			<form id="form" action="{{ url_for('sector_edit', id=id) }}" method="POST" novalidate>
+				<!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
+				{{ form.hidden_tag() }}
+				<div class="form-group">
+					<p>
+						{{ form.name.label }}<br>
+						{{ form.name(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.name.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{% for error in form.name.errors %}
+							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+						{% endfor %}
+					</p>
+
+				</div>
+					{{ form.submit(class="btn btn-outline-primary") }}
+				<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

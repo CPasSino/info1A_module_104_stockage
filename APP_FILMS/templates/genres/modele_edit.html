@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Ajouter un GENRE (WTF) {% endblock %}
+{% block title %} Éditer le Modèle {% endblock %}
 {% block body %}
 <div class="container">
 	<div class="row">
@@ -7,7 +7,7 @@
 			<p>
 				Ajouter un nouvel enregistrement
 			</p>
-			<form id="form" action="{{ url_for('modele_ajouter') }}" method="POST" novalidate>
+			<form id="form" action="{{ url_for('model_edit', id=id) }}" method="POST" novalidate>
 				<!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
 				{{ form.hidden_tag() }}
 				<div class="form-group">
@@ -20,7 +20,7 @@
 					</p>
 					<div class="form-group">
 						<label for="secteur">Choisis ton secteur</label>
-						<select class="form-select form-control text-light bg-dark" id="secteur" name="secteur">
+						<select class="form-control-lg form-control text-light bg-dark" id="secteur" name="secteur">
 							{% for row in secteurs %}
 								{% if row.id_model == used_secteurs.fk_model %}
 									<option value="{{ row.id_sector }}"selected >{{ row.name_sector }}</option>
@@ -32,7 +32,7 @@
 					</div>
 					<p>
 						{{ form.bought_date_model.label }}<br>
-						{{ form.bought_date_model(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.bought_date_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{{ form.bought_date_model(type = "date", class="form-control form-control-lg is-invalid bg-dark text-light" if form.bought_date_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.bought_date_model.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
@@ -46,21 +46,12 @@
 					</p>
 					<p>
 						{{ form.description_model.label }}<br>
-						{{ form.description_model(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.description_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+						{{ form.description_model(class="form-control form-control-lg is-invalid bg-dark text-light" if form.description_model.errors else "form-control form-control-lg bg-dark text-light") }}<br>
 						{% for error in form.description_model.errors %}
 							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
 						{% endfor %}
 					</p>
-
-					<p>
-						{{ form.quantite.label }}<br>
-						{{ form.quantite(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.quantite.errors else "form-control form-control-lg bg-dark text-light") }}<br>
-						{% for error in form.quantite.errors %}
-							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
-						{% endfor %}
-					</p>
-
-				</div>
+					</div>
 					<input class="btn btn-outline-info" type="submit" form="form" value="Enegistrer">
 				<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>
 			</form>

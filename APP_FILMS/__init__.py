@@ -78,9 +78,11 @@ except Exception as error_app:
     Dans l'aplication les lignes ci-dessous doivent se trouver ici... soit après l'instanciation de la classe "Flask"
 """
 from APP_FILMS.database import database_tools
-
 from APP_FILMS.essais_wtf_forms import gestion_essai_wtf
-
-from APP_FILMS.genres import gestion_endpoints
-
 from APP_FILMS.zzzdemos import routes_demos
+from APP_FILMS.routes import customers
+from APP_FILMS.routes import devices
+from APP_FILMS.routes import modeles
+from APP_FILMS.routes import sectors
+from APP_FILMS.routes import status
+from APP_FILMS.routes import uses

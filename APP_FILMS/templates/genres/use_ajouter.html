@@ -12,8 +12,8 @@
 				{{ form.hidden_tag() }}
 				<div class="form-group">
 					<div class="form-group">
-						<label for="device">Trouve le numéro de série</label>
-						<select class="form-select form-control text-light bg-dark" id="device" name="device">
+						<label for="device">Choisis le modèle</label>
+						<select class="form-control-lg form-control text-light bg-dark" id="device" name="device">
 							<option value="placeholder" hidden selected></option>
 							{% for row in device %}
 									<option value="{{ row.id_model }}" >{{ row.name_model }}</option>
@@ -22,7 +22,7 @@
 					</div>
 					<div class="form-group">
 						<label for="customer">Trouve ton client</label>
-						<select class="form-select form-control text-light bg-dark" id="customer" name="customer">
+						<select class="form-control-lg form-control text-light bg-dark" id="customer" name="customer">
 							<option value="placeholder" hidden selected></option>
 							{% for row in customer %}
 								<option value="{{ row.id_customer }}">{{ row.first_name_customer }} {{ row.last_name_customer }}</option>

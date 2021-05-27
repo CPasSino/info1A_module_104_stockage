@@ -20,7 +20,7 @@
 					</p>
 					<div class="form-group">
 						<label for="secteur">Choisis ton secteur</label>
-						<select class="form-select form-control text-light bg-dark" id="secteur" name="secteur">
+						<select class="form-control-lg form-control text-light bg-dark" id="secteur" name="secteur">
 							<option value="placeholder" hidden selected></option>
 							{% for row in secteurs %}
 									<option value="{{ row.id_sector }}">{{ row.name_sector }}</option>

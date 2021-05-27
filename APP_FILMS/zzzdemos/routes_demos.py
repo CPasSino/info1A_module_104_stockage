@@ -20,9 +20,9 @@ def index():
 @obj_mon_application.route('/')
 @obj_mon_application.route('/homepage')
 def mapagepricipale():
-    strsql_insert_genre = f""" SELECT name_model                                                                                                             sn,
+    strsql_insert_genre = f""" SELECT name_model, id_model,
                                       (SELECT COUNT(id_start_use) FROM t_use LEFT JOIN t_device ON id_device = fk_device WHERE fk_model  = id_model)       used,
-                                      quantite_model                                                                                                             free
+                                      quantite_model                                                                                                       free
                                         
                                   FROM t_model
                                     """
