@@ -2,89 +2,92 @@
 {% block title %} Afficher GENRES {% endblock %}
 {% block body %}
 <div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<p>
-				Clients
-			</p>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                Clients
+            </p>
             <table class="table table-responsive-sm table-sm">
-            {% if data %}
+                {% if data %}
                 <thead>
-                    <tr>
-                        <th class="align-middle">
-                            id
-                        </th>
-                        <th class="align-middle">
-                            Prénom
-                        </th>
-                        <th class="align-middle">
-							Nom
-                        </th>
-                        <th class="align-middle">
-							Secteur
-                        </th>
-						<th class="align-middle">
-							Numéro de téléphone
-                        </th>
-						<th class="align-middle">
-							Numéro privé
-                        </th>
-						<th class="align-middle">
-							Localisation
-                        </th>
-                    </tr>
+                <tr>
+                    <th class="align-middle">
+                        id
+                    </th>
+                    <th class="align-middle">
+                        Prénom
+                    </th>
+                    <th class="align-middle">
+                        Nom
+                    </th>
+                    <th class="align-middle">
+                        Secteur
+                    </th>
+                    <th class="align-middle">
+                        Numéro de téléphone
+                    </th>
+                    <th class="align-middle">
+                        Numéro privé
+                    </th>
+                    <th class="align-middle">
+                        Localisation
+                    </th>
+                </tr>
                 </thead>
-            {% endif %}
+                {% endif %}
 
-            {% for row in data %}
-				<tbody>
-					<tr>
-						<td class="align-middle">
-							{{ row.id_customer }}
-						</td>
-						<td class="align-middle">
-							{{ row.first_name_customer }}
-						</td>
-						<td class="align-middle">
-							{{ row.last_name_customer }}
-						</td>
-						<td class="align-middle">
-							{{ row.fk_sector }}
-						</td>
-						<td class="align-middle">
-							{{ row.phone_customer }}
-						</td>
-						<td class="align-middle">
-							{{ row.personal_number_customer }}
-						</td>
-						<td class="align-middle">
-							{{ row.location_customer }}
-						</td>
+                {% for row in data %}
+                <tbody>
+                <tr>
+                    <td class="align-middle">
+                        {{ row.id_customer }}
+                    </td>
+                    <td class="align-middle">
+                        {{ row.first_name_customer }}
+                    </td>
+                    <td class="align-middle">
+                        {{ row.last_name_customer }}
+                    </td>
+                    <td class="align-middle">
+                        {{ row.name_sector }}
+                    </td>
+                    <td class="align-middle">
+                        {{ row.phone_customer }}
+                    </td>
+                    <td class="align-middle">
+                        {{ row.personal_number_customer }}
+                    </td>
+                    <td class="align-middle">
+                        {{ row.location_customer }}
+                    </td>
 
 
-						</td>
-						<td class="text-center" class="align-middle">
-							<a class="btn btn-outline-warning" href="{{ url_for('customer_edit', id = row.id_customer) }}" role="button">Edit</a>
-						</td>
-						<td class="text-center" class="align-middle">
-							<a class="btn btn-outline-danger" href="{{ url_for('customer_delete', id = row.id_customer) }}" role="button">Delete</a>
-						</td>
-					</tr>
-				</tbody>
-            {% else %}
-				<tbody>
-					<tr>
-						<td>
-							Aucunes données
-						</td>
-					</tr>
-				</tbody>
-            {% endfor %}
-			</table>
-			<div class="d-grid gap-2">
-				<a class="btn btn-lg btn-outline-info" type="button" href="{{ url_for('customer_ajouter') }}" role="button">Ajouter</a>
-			</div>
-	</div>
-</div>
-{% endblock %}
+                    </td>
+                    <td class="text-center" class="align-middle">
+                        <a class="btn btn-outline-warning" href="{{ url_for('customer_edit', id = row.id_customer) }}"
+                           role="button">Edit</a>
+                    </td>
+                    <td class="text-center" class="align-middle">
+                        <a class="btn btn-outline-danger" href="{{ url_for('customer_delete', id = row.id_customer) }}"
+                           role="button">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+                {% else %}
+                <tbody>
+                <tr>
+                    <td>
+                        Aucunes données
+                    </td>
+                </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            <div class="d-grid gap-2">
+                <a class="btn btn-lg btn-outline-info" href="{{ url_for('customer_ajouter') }}" role="button"
+                   type="button">Ajouter</a>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
 

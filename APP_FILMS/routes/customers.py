@@ -1,13 +1,13 @@
 from flask import flash
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from flask import redirect
 
 from APP_FILMS import obj_mon_application
 from APP_FILMS.database.connect_db_context_manager import MaBaseDeDonnee
-from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.erreurs.exceptions import *
+from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.genres.class_forms import *
 
 
@@ -24,15 +24,17 @@ def customers_afficher(order_by, id_customer):
 
             with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
                 if order_by == "ASC" and id_customer == 0:
-                    strsql_genres_afficher = """SELECT id_customer, first_name_customer, last_name_customer, fk_sector, phone_customer, personal_number_customer, location_customer FROM t_customer ORDER BY id_customer ASC"""
-                    mc_afficher.execute(strsql_genres_afficher)
-
-                elif order_by == "ASC":
-                    strsql_genres_afficher = f"""SELECT id_customer, first_name_customer, last_name_customer, fk_sector, phone_customer, personal_number_customer, location_customer FROM t_customer  WHERE id_customer = {id_customer}"""
+                    strsql_genres_afficher = """SELECT id_customer, first_name_customer, last_name_customer, name_sector, phone_customer, personal_number_customer, location_customer
+                                                    FROM t_customer 
+                                                           LEFT JOIN t_sector ON id_sector = fk_sector
+                                                ORDER BY id_customer ASC"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 else:
-                    strsql_genres_afficher = """SELECT id_customer, first_name_customer, last_name_customer, fk_sector, phone_customer, personal_number_customer, location_customer FROM t_customer ORDER BY id_customer DESC"""
+                    strsql_genres_afficher = """SELECT id_customer, first_name_customer, last_name_customer, name_sector, phone_customer, personal_number_customer, location_customer 
+                                                    FROM t_customer 
+                                                        LEFT JOIN t_sector ON id_sector = fk_sector
+                                                ORDER BY id_customer DESC"""
                     mc_afficher.execute(strsql_genres_afficher)
 
                 data_genres = mc_afficher.fetchall()
@@ -168,7 +170,6 @@ def customer_edit(id):
         form.personal_number_customer.data = data.get("personal_number_customer")
         form.location.data = data.get("location_customer")
 
-
     strsql_insert_genre = f"""SELECT id_sector, name_sector FROM t_sector """
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
@@ -179,4 +180,5 @@ def customer_edit(id):
         mc_afficher.execute(strsql_insert_genre)
         used_secteurs = mc_afficher.fetchall()
 
-    return render_template("genres/customer_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs, id=id)
+    return render_template("genres/customer_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs,
+                           id=id)

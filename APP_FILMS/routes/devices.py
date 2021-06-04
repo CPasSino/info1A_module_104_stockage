@@ -1,13 +1,13 @@
 from flask import flash
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from flask import redirect
 
 from APP_FILMS import obj_mon_application
 from APP_FILMS.database.connect_db_context_manager import MaBaseDeDonnee
-from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.erreurs.exceptions import *
+from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.genres.class_forms import *
 
 
@@ -65,7 +65,8 @@ def device_afficher(order_by, id_device):
 def genre_ajouter():
     form = FormDevices()
     if request.method == "POST":
-        if form.validate_on_submit() and request.form.getlist('modeles')[0] and request.form.getlist('status')[0] != 'placeholder':
+        if form.validate_on_submit() and request.form.getlist('modeles')[0] and request.form.getlist('status')[
+            0] != 'placeholder':
             try:
                 try:
                     MaBaseDeDonnee().connexion_bd.ping(False)
@@ -215,4 +216,5 @@ def genre_edit(id):
         mc_afficher.execute(strsql_insert_genre)
         used_status = mc_afficher.fetchone()
 
-    return render_template("genres/device_edit.html", form=form, modeles=modeles, status=status, used_modeles=used_modeles, used_status=used_status, id=id)
+    return render_template("genres/device_edit.html", form=form, modeles=modeles, status=status,
+                           used_modeles=used_modeles, used_status=used_status, id=id)

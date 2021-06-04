@@ -2,24 +2,28 @@
 {% block title %} Homepage FILMS {% endblock %}
 {% block body %}
 <div class="container">
-	{% for row in data %}
-	<div class="row">
-		<div class="col-6">
-			<div class="progress bg-dark">
-			  <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ 100 / (row.free + row.used) * row.free if row.free > 0 else 0}}" aria-valuemin="0" aria-valuemax="100" style="width: {{ 100 / (row.free + row.used) * row.free if row.free > 0 else 0}}%;">
-				<strong><span class="">{{ (100 / (row.free + row.used) * row.free if row.free > 0 else 0).__int__() }} %</span></strong>
-			  </div>
+    {% for row in data %}
+    <div class="row">
+        <div class="col-6">
+            <div class="progress bg-dark">
+                <div aria-valuemax="100" aria-valuemin="0"
+                     aria-valuenow="{{ 100 / (row.free + row.used) * row.free if row.free > 0 else 0}}"
+                     class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar"
+                     style="width: {{ 100 / (row.free + row.used) * row.free if row.free > 0 else 0}}%;">
+                    <strong><span class="">{{ (100 / (row.free + row.used) * row.free if row.free > 0 else 0).__int__() }} %</span></strong>
+                </div>
 
-			</div>
-			<p>
-				{{ row.free }} {{ row.name_model }} libre sur {{ row.free + row.used }}
-			</p>
-		</div>
-		<div class="col">
-			<a type="button" class="btn btn-outline-success" href="{{ url_for('modele_afficher', order_by='ASC', id_modele=row.id_model) }}">Details</a>
-		</div>
+            </div>
+            <p>
+                {{ row.free }} {{ row.name_model }} libre sur {{ row.free + row.used }}
+            </p>
+        </div>
+        <div class="col">
+            <a class="btn btn-outline-success" href="{{ url_for('modele_afficher', order_by='ASC', id_modele=row.id_model) }}"
+               type="button">Details</a>
+        </div>
 
-	</div>
-	{% endfor %}
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

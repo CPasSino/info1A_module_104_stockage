@@ -2,53 +2,54 @@
 {% block title %} Ajouter un GENRE (WTF) {% endblock %}
 {% block body %}
 <div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<p>
-				Ajouter un nouvel enregistrement
-			</p>
-			<form id="form" action="{{ url_for('genre_edit', id=id) }}" method="POST" novalidate>
-				<!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
-				{{ form.hidden_tag() }}
-				<div class="form-group">
-					<p>
-						{{ form.sn.label }}<br>
-						{{ form.sn(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.sn.errors else "form-control form-control-lg bg-dark text-light") }}<br>
-						{% for error in form.sn.errors %}
-							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
-						{% endfor %}
-					</p>
-					<div class="form-group">
-						<label for="modeles">Choisis le modèle</label>
-						<select class="form-control-lg form-control text-light bg-dark" id="modeles" name="modeles">
-							{% for row in modeles %}
-								{% if row.id_device == used_modeles.fk_device %}
-									<option value="{{ row.id_model }}"selected >{{ row.name_model }}</option>
-							{% else %}
-									<option value="{{ row.id_model }}">{{ row.name_model }}</option>
-								{% endif %}
-							{% endfor %}
-						</select><br>
-					</div>
-					<div class="form-group">
-						<label for="status">Choisis le status</label>
-						<select class="form-control-lg form-control text-light bg-dark" id="status" name="status">
-							{% for row in status %}
-								{% if row.id_device == used_status.fk_device %}
-									<option value="{{ row.id_status }}"selected>{{ row.name_status }}</option>
-							{% else %}
-									<option value="{{ row.id_status }}">{{ row.name_status }}</option>
-								{% endif %}
-							{% endfor %}
-						</select><br>
-					</div>
-				</div>
-				<input class="btn btn-outline-info" type="submit" form="form" value="Enegistrer">
-				<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>
-			</form>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                Ajouter un nouvel enregistrement
+            </p>
+            <form action="{{ url_for('genre_edit', id=id) }}" id="form" method="POST" novalidate>
+                <!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <p>
+                        {{ form.sn.label }}<br>
+                        {{ form.sn(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if
+                        form.sn.errors else "form-control form-control-lg bg-dark text-light") }}<br>
+                        {% for error in form.sn.errors %}
+                        <span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <div class="form-group">
+                        <label for="modeles">Choisis le modèle</label>
+                        <select class="form-control-lg form-control text-light bg-dark" id="modeles" name="modeles">
+                            {% for row in modeles %}
+                            {% if row.id_device == used_modeles.fk_device %}
+                            <option selected value="{{ row.id_model }}">{{ row.name_model }}</option>
+                            {% else %}
+                            <option value="{{ row.id_model }}">{{ row.name_model }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Choisis le status</label>
+                        <select class="form-control-lg form-control text-light bg-dark" id="status" name="status">
+                            {% for row in status %}
+                            {% if row.id_device == used_status.fk_device %}
+                            <option selected value="{{ row.id_status }}">{{ row.name_status }}</option>
+                            {% else %}
+                            <option value="{{ row.id_status }}">{{ row.name_status }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select><br>
+                    </div>
+                </div>
+                <input class="btn btn-outline-info" form="form" type="submit" value="Enegistrer">
+                <a class="btn btn-outline-danger" onclick="history.back(-1)" type="button">Annuler</a>
+            </form>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

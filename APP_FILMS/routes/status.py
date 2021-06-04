@@ -1,13 +1,13 @@
 from flask import flash
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from flask import redirect
 
 from APP_FILMS import obj_mon_application
 from APP_FILMS.database.connect_db_context_manager import MaBaseDeDonnee
-from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.erreurs.exceptions import *
+from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.genres.class_forms import *
 
 

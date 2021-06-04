@@ -4,21 +4,23 @@
 <div class="container">
     <h1>Essai de quelques champs de formulaire avec WTForms</h1>
     <p></p>
-    <p><li>1er essai : Laisser les champs vides et cliquer sur le bouton Ok !!!</li></p>
+    <p>
+    <li>1er essai : Laisser les champs vides et cliquer sur le bouton Ok !!!</li>
+    </p>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>
             {{ form.username(size=15) }}<br>
             {% for error in form.username.errors %}
-                <span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+            <span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
             {% endfor %}
         </p>
         <p>
             {{ form.password.label }}<br>
             {{ form.password(size=8) }}<br>
             {% for error in form.password.errors %}
-                <span style="color: yellow;">[{{ error }}]</span>
+            <span style="color: yellow;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>

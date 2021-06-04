@@ -2,61 +2,69 @@
 {% block title %} Ajouter un GENRE (WTF) {% endblock %}
 {% block body %}
 <div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<p>
-				Ajouter un nouvel enregistrement
-			</p>
-			<form id="form" action="{{ url_for('use_ajouter') }}" method="POST" novalidate>
-				<!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
-				{{ form.hidden_tag() }}
-				<div class="form-group">
-					<div class="form-group">
-						<label for="device">Choisis le modèle</label>
-						<select class="form-control-lg form-control text-light bg-dark" id="device" name="device">
-							<option value="placeholder" hidden selected></option>
-							{% for row in device %}
-									<option value="{{ row.id_model }}" >{{ row.name_model }}</option>
-							{% endfor %}
-						</select><br>
-					</div>
-					<div class="form-group">
-						<label for="customer">Trouve ton client</label>
-						<select class="form-control-lg form-control text-light bg-dark" id="customer" name="customer">
-							<option value="placeholder" hidden selected></option>
-							{% for row in customer %}
-								<option value="{{ row.id_customer }}">{{ row.first_name_customer }} {{ row.last_name_customer }}</option>
-							{% endfor %}
-						</select><br>
-					</div>
-					<p>
-						{{ form.date_start_use.label }}<br>
-						{{ form.date_start_use(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.date_start_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
-						{% for error in form.date_start_use.errors %}
-							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
-						{% endfor %}
-					</p>
-					<p>
-						{{ form.date_end_use.label }}<br>
-						{{ form.date_end_use(type = "date" , class="form-control form-control-lg is-invalid bg-dark text-light" if form.date_end_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
-						{% for error in form.date_end_use.errors %}
-							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
-						{% endfor %}
-					</p>
-					<p>
-						{{ form.reason_end_use.label }}<br>
-						{{ form.reason_end_use(size=32 , class="form-control form-control-lg is-invalid bg-dark text-light" if form.reason_end_use.errors else "form-control form-control-lg bg-dark text-light") }}<br>
-						{% for error in form.reason_end_use.errors %}
-							<span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
-						{% endfor %}
-					</p>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                Ajouter un nouvel enregistrement
+            </p>
+            <form action="{{ url_for('use_ajouter') }}" id="form" method="POST" novalidate>
+                <!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="device">Choisis le modèle</label>
+                        <select class="form-control-lg form-control text-light bg-dark" id="device" name="device">
+                            <option hidden selected value="placeholder"></option>
+                            {% for row in device %}
+                            <option value="{{ row.id_model }}">{{ row.name_model }}</option>
+                            {% endfor %}
+                        </select><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer">Trouve ton client</label>
+                        <select class="form-control-lg form-control text-light bg-dark" id="customer" name="customer">
+                            <option hidden selected value="placeholder"></option>
+                            {% for row in customer %}
+                            <option value="{{ row.id_customer }}">{{ row.first_name_customer }} {{
+                                row.last_name_customer }}
+                            </option>
+                            {% endfor %}
+                        </select><br>
+                    </div>
+                    <p>
+                        {{ form.date_start_use.label }}<br>
+                        {{ form.date_start_use(type = "date" , class="form-control form-control-lg is-invalid bg-dark
+                        text-light" if form.date_start_use.errors else "form-control form-control-lg bg-dark
+                        text-light") }}<br>
+                        {% for error in form.date_start_use.errors %}
+                        <span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.date_end_use.label }}<br>
+                        {{ form.date_end_use(type = "date" , class="form-control form-control-lg is-invalid bg-dark
+                        text-light" if form.date_end_use.errors else "form-control form-control-lg bg-dark text-light")
+                        }}<br>
+                        {% for error in form.date_end_use.errors %}
+                        <span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.reason_end_use.label }}<br>
+                        {{ form.reason_end_use(size=32 , class="form-control form-control-lg is-invalid bg-dark
+                        text-light" if form.reason_end_use.errors else "form-control form-control-lg bg-dark
+                        text-light") }}<br>
+                        {% for error in form.reason_end_use.errors %}
+                        <span class="badge text-light bg-danger" style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </p>
 
-				</div>
-				<input class="btn btn-outline-info" type="submit" form="form" value="Enegistrer">
-				<a type="button" onclick="history.back(-1)" class="btn btn-outline-danger">Annuler</a>
-			</form>
-		</div>
-	</div>
+                </div>
+                <input class="btn btn-outline-info" form="form" type="submit" value="Enegistrer">
+                <a class="btn btn-outline-danger" onclick="history.back(-1)" type="button">Annuler</a>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

@@ -1,13 +1,13 @@
 from flask import flash
+from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from flask import redirect
 
 from APP_FILMS import obj_mon_application
 from APP_FILMS.database.connect_db_context_manager import MaBaseDeDonnee
-from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.erreurs.exceptions import *
+from APP_FILMS.erreurs.msg_erreurs import *
 from APP_FILMS.genres.class_forms import *
 
 
@@ -75,7 +75,6 @@ def use_ajouter():
                     raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
                 if form.validate_on_submit():
-
                     strsql_insert_genre = f"""INSERT INTO t_use (id_start_use, fk_device, fk_customer, date_start_use, date_end_use, reason_end_use) 
                                             VALUES (NULL,(SELECT id_device FROM t_device WHERE fk_model = {int(request.form.getlist('device')[0])} LIMIT 1), "{int(request.form.getlist('customer')[0])}", "{form.date_start_use.data}", "{form.date_end_use.data}", "{form.reason_end_use.data}")"""
                     with MaBaseDeDonnee() as mconn_bd:
@@ -218,6 +217,5 @@ def use_edit(id):
         used_customer = mc_afficher.fetchone()
 
     return render_template("genres/use_edit.html", form=form, device=device, used_device=used_device,
-                           strsql_insert_genre=strsql_insert_genre, used_customer=used_customer, customer=customer, id=id)
-
-
+                           strsql_insert_genre=strsql_insert_genre, used_customer=used_customer, customer=customer,
+                           id=id)

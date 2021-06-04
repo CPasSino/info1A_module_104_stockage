@@ -1,11 +1,8 @@
-SEPARES TES FICHIERS                                                Good
-
-
-edit renvoient vers add                                             Good
-affichage de toute donnée                                           .
 relation pour delete
 pas pouvoir emprenter si déjà fait (edit)
 affichage données en edit
 quantite model = nb enregistrement device qui utilise modele
 secteur dans modele ???
-Changer nom sn -> modele                                            Good
+Verifier le bouton edit sur chaque table
+
+
