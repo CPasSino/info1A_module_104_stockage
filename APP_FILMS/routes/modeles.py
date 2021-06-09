@@ -141,7 +141,7 @@ def model_edit(id):
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
-                strsql_insert_genre = f"""INSERT INTO t_model (id_model, name_model, fk_sector, bought_date_model, guarantee_date_model, description_model, quantite_model) VALUES (NULL,"{form.name.data.lower()}", "{int(request.form.getlist('secteur')[0])}", "{form.bought_date_model.data}", "{form.guarantee_date_model.data}", "{form.description_model.data.lower()}", 0)"""
+                strsql_insert_genre = f"""UPDATE t_model SET name_model = "{form.name.data.lower()}", fk_sector = {int(request.form.getlist('secteur')[0])}, bought_date_model = "{form.bought_date_model.data}", guarantee_date_model = "{form.guarantee_date_model.data}", description_model = "{form.description_model.data.lower()}" WHERE id_model = {id}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -175,5 +175,7 @@ def model_edit(id):
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
         used_secteurs = mc_afficher.fetchone()
+
+    print(used_secteurs, secteurs)
 
     return render_template("genres/modele_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs, id=id)

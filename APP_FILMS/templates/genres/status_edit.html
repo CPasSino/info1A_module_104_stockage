@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %} Modifié le status {% endblock %}
+{% block title %} Status Edit {% endblock %}
 {% block body %}
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <p>
-                Modifié l'enregistrement
+                Modifier l'enregistrement
             </p>
-            <form action="{{ url_for('model_edit', id=id) }}" id="form" method="POST" novalidate>
+            <form action="{{ url_for('status_edit', id=id) }}" id="form" method="POST" novalidate>
                 <!-- Protection contre les attaques Cross-Site Request Forgery (CSRF) -->
                 {{ form.hidden_tag() }}
                 <div class="form-group">

@@ -1,5 +1,5 @@
    {% extends "base.html" %}
-   {% block title %} Éditer le Modèle {% endblock %}
+   {% block title %} Modèle Edit {% endblock %}
    {% block body %}'
    <div class="container">
        <div class="row">
@@ -23,7 +23,7 @@
                            <label for="secteur">Choisis ton secteur</label>
                            <select class="form-control-lg form-control text-light bg-dark" id="secteur" name="secteur">
                                {% for row in secteurs %}
-                               {% if row.id_model == used_secteurs.fk_model %}
+                               {% if row.id_sector == used_secteurs.fk_sector %}
                                <option selected value="{{ row.id_sector }}">{{ row.name_sector }}</option>
                                {% else %}
                                <option value="{{ row.id_sector }}">{{ row.name_sector }}</option>

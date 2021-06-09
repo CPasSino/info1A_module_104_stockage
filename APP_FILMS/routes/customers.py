@@ -144,7 +144,7 @@ def customer_edit(id):
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
-                strsql_insert_genre = f"""UPDATE t_customer SET first_name_customer = "{form.first_name.data.lower()}", last_name_customer = "{form.last_name.data.lower()}", fk_sector = "{int(form.sector.data)}", phone_customer = "{int(form.phone_customer.data)}", personal_number_customer = "{int(form.personal_number_customer.data)}", location_customer = "{int(form.location.data)}" WHERE id_customer = {id}"""
+                strsql_insert_genre = f"""UPDATE t_customer SET first_name_customer = "{form.first_name.data.lower()}", last_name_customer = "{form.last_name.data.lower()}", fk_sector = {request.form.getlist('secteur')[0]}, phone_customer = "{int(form.phone_customer.data)}", personal_number_customer = "{int(form.personal_number_customer.data)}", location_customer = "{form.location.data}" WHERE id_customer = {id}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -178,7 +178,8 @@ def customer_edit(id):
     strsql_insert_genre = f"""SELECT fk_sector FROM t_customer WHERE id_customer = {id} """
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
-        used_secteurs = mc_afficher.fetchall()
+        used_secteurs = mc_afficher.fetchone()
 
-    return render_template("genres/customer_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs,
-                           id=id)
+    print(used_secteurs, secteurs)
+
+    return render_template("genres/customer_edit.html", form=form, secteurs=secteurs, used_secteurs=used_secteurs, id=id)

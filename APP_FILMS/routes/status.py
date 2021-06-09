@@ -155,4 +155,4 @@ def status_edit(id):
 
         form.name.data = data.get("name_status")
 
-    return render_template("genres/statut_ajouter.html", form=form, id=id)
+    return render_template("genres/status_edit.html", form=form, id=id)

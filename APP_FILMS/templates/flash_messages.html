@@ -1,17 +1,14 @@
-<!-- https://pythonise.com/series/learning-flask/flask-message-flashing -->
-<div alert-dismissible class="container" container fade p-0 show style="margin-top:60px;>
+<div class="container" style="margin-top:60px;">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class=" text-center">
-<div class="alert alert-{{ category if category != 'message' else 'info' }}  mb-2" role="alert">
-    {{ message }}
-    <button aria-label="Close" class="close" data-bs-dismiss="alert" dismiss="alert" type="button">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
+                <div class="alert alert-{{ category if category != 'message' else 'info' }}  mb-2" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </div>

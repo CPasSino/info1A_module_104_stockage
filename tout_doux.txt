@@ -1,8 +1,4 @@
 relation pour delete
-pas pouvoir emprenter si déjà fait (edit)
-affichage données en edit
-quantite model = nb enregistrement device qui utilise modele
-secteur dans modele ???
-Verifier le bouton edit sur chaque table
-
-
+faire les tags
+la date (limitation)
+Avoir 6 pour le Zucchinetti National

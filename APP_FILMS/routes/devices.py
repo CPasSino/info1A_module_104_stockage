@@ -65,8 +65,7 @@ def device_afficher(order_by, id_device):
 def genre_ajouter():
     form = FormDevices()
     if request.method == "POST":
-        if form.validate_on_submit() and request.form.getlist('modeles')[0] and request.form.getlist('status')[
-            0] != 'placeholder':
+        if form.validate_on_submit() and request.form.getlist('modeles')[0] and request.form.getlist('status')[0] != 'placeholder':
             try:
                 try:
                     MaBaseDeDonnee().connexion_bd.ping(False)
@@ -171,10 +170,10 @@ def genre_edit(id):
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
-                strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model - 1 WHERE id_model = {(int(form.fk_model.data))}"""
+                strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model - 1 WHERE id_model = {request.form.getlist('modeles')[0]}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
-                strsql_insert_genre = f"""UPDATE t_device SET serial_number_device = "{form.sn.data.lower()}", fk_model = {(int(form.fk_model.data))}, fk_status = {(int(form.fk_status.data))} WHERE id_device = {id}"""
+                strsql_insert_genre = f"""UPDATE t_device SET serial_number_device = "{form.sn.data.lower()}", fk_model = {request.form.getlist('modeles')[0]}, fk_status = {request.form.getlist('status')[0]} WHERE id_device = {id}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
