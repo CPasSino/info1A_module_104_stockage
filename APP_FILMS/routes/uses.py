@@ -182,13 +182,17 @@ def use_edit(id):
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
             if form.validate_on_submit():
+                strsql_insert_genre = f"""SELECT * FROM t_use WHERE id_start_use = {id}"""
+                with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+                    mc_afficher.execute(strsql_insert_genre)
+                    print(mc_afficher.fetchone())
                 strsql_insert_genre = f"""UPDATE t_model SET quantite_model = quantite_model + 1 WHERE id_model = (SELECT fk_model FROM t_device WHERE id_device = (SELECT fk_device FROM t_use WHERE id_start_use = {id}))"""
 
                 print(strsql_insert_genre)
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
-                strsql_insert_genre = f"""UPDATE t_use SET fk_device = "{request.form.getlist('device')[0]}", fk_customer = "{request.form.getlist('customer')[0]}", date_start_use = "{(form.date_start_use.data)}", date_end_use = "{(form.date_end_use.data)}", reason_end_use = "{(form.reason_end_use.data.lower())}" WHERE id_start_use = {id}"""
+                strsql_insert_genre = f"""UPDATE t_use SET fk_device = (SELECT id_device FROM t_device WHERE fk_model = {request.form.getlist('device')[0]} AND id_device NOT IN (SELECT * FROM (SELECT fK_device FROM t_use) tuse) LIMIT 1), fk_customer = {request.form.getlist('customer')[0]}, date_start_use = "{(form.date_start_use.data)}", date_end_use = "{(form.date_end_use.data)}", reason_end_use = "{(form.reason_end_use.data.lower())}" WHERE id_start_use = {id}"""
                 with MaBaseDeDonnee() as mconn_bd:
                     mconn_bd.mabd_execute(strsql_insert_genre)
 
@@ -199,6 +203,10 @@ def use_edit(id):
 
                 flash(f"Données mises à jour !!", "success")
                 print(f"Données mises à jour !!")
+                strsql_insert_genre = f"""SELECT * FROM t_use WHERE id_start_use = {id}"""
+                with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
+                    mc_afficher.execute(strsql_insert_genre)
+                    print(mc_afficher.fetchone())
 
                 return redirect(url_for('use_afficher', order_by='ASC', id_use=0))
 
@@ -222,7 +230,7 @@ def use_edit(id):
         mc_afficher.execute(strsql_insert_genre)
         model = mc_afficher.fetchall()
 
-    strsql_insert_genre = f"""SELECT id_model, name_model FROM t_model INNER JOIN t_use ON id_start_use = {id} INNER JOIN t_device ON id_device = fk_device WHERE id_model = fk_model """
+    strsql_insert_genre = f"""SELECT id_model, name_model FROM t_use LEFT JOIN t_device ON id_device = fk_device LEFT JOIN t_model ON id_model = fk_model WHERE id_start_use = {id}"""
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
         used_model = mc_afficher.fetchone()
