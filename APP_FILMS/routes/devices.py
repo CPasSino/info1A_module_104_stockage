@@ -138,6 +138,26 @@ def genre_delete(id):
             with MaBaseDeDonnee() as mconn_bd:
                 mconn_bd.mabd_execute(strsql_insert_genre)
 
+            with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
+                sql = f"""
+                        select id_device, name_model, serial_number_device 
+                            from t_device
+                                INNER join t_model ON id_device
+
+                            Where id_device = {id}"""
+
+                mconn_bd.execute(sql)
+                data = mconn_bd.fetchall()
+
+            return render_template('genres/device_delete.html', data=data, id=id)
+
+        except Exception as erreur:
+            print(f"RGG Erreur générale.")
+            flash(f"RGG Exception {erreur}")
+            raise Exception(f"RGG Erreur générale. {erreur}")
+
+    elif request.method == "POST":
+        try:
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_device WHERE id_device = {id}"""
                 mconn_bd.mabd_execute(trsql_genres_afficher)

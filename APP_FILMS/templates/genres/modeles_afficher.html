@@ -41,26 +41,26 @@
                 <tbody>
                 <tr>
                     <td class="align-middle">
-                        {{ row.id_model }}
+                        {{ row.id_model or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_model }}
+                        {{ row.name_model or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_sector }}
+                        {{ row.name_sector or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.bought_date_model }}
+                        {{ row.bought_date_model or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.guarantee_date_model }}
+                        {{ row.guarantee_date_model or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.description_model }}
+                        {{ row.description_model or "-" }}
                     </td>
 
                     <td class="align-middle">
-                        {{ row.quantite_model }}
+                        {{ row.quantite_model or "-" }}
                     </td>
                     <td class="text-center" class="align-middle">
                         <a class="btn btn-outline-warning" href="{{ url_for('model_edit', id = row.id_model) }}"

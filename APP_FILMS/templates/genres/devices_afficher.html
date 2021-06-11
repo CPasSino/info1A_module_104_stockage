@@ -32,16 +32,16 @@
                 <tbody>
                 <tr>
                     <td class="align-middle">
-                        {{ row.id_device }}
+                        {{ row.id_device or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.serial_number_device }}
+                        {{ row.serial_number_device or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_model }}
+                        {{ row.name_model or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_status }}
+                        {{ row.name_status or "-" }}
                     </td>
                     <td class="text-center" class="align-middle">
                         <a class="btn btn-outline-warning" href="{{ url_for('genre_edit', id = row.id_device) }}"

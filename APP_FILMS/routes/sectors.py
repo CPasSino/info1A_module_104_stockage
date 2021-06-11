@@ -105,6 +105,26 @@ def sector_delete(id):
                 flash("Il faut connecter une base de données", "danger")
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
+            with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
+                sql = f"""
+                        select model, name, last_name 
+                        from 
+                            (select name_model model, null name, null last_name FROM t_model where fk_sector = {id}
+                        UNION all
+                            select null model, first_name_customer name, last_name_customer last_name from t_customer where fk_sector = {id}) ali"""
+
+                mconn_bd.execute(sql)
+                data = mconn_bd.fetchall()
+
+            return render_template('genres/sector_delete.html', data=data, id=id)
+
+        except Exception as erreur:
+            print(f"RGG Erreur générale.")
+            flash(f"RGG Exception {erreur}")
+            raise Exception(f"RGG Erreur générale. {erreur}")
+
+    elif request.method == "POST":
+        try:
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_sector WHERE id_sector = {id}"""
                 mconn_bd.mabd_execute(trsql_genres_afficher)
@@ -112,7 +132,7 @@ def sector_delete(id):
             flash(f"Données supprimées !!", "success")
             print(f"Données supprimées !!")
 
-            return redirect(url_for('sector_afficher', order_by='ASC', id_sector=0))
+            return redirect(url_for('sector_afficher', order_by='ASC', id_sector=0, id=id))
 
         except Exception as erreur:
             print(f"RGG Erreur générale.")

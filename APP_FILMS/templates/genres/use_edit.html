@@ -14,8 +14,8 @@
                     <div class="form-group">
                         <label for="device">Choisis le modèle</label>
                         <select class="form-control-lg form-control text-light bg-dark" id="device" name="device">
-                            {% for row in device %}
-                            {% if row.id_model == used_device.fk_model %}
+                            {% for row in model %}
+                            {% if row.id_model == used_model.fk_model %}
                             <option selected value="{{ row.id_model }}">{{ row.name_model }}</option>
                             {% else %}
                             <option value="{{ row.id_model }}">{{ row.name_model }}</option>

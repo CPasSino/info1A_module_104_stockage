@@ -40,25 +40,25 @@
                 <tbody>
                 <tr>
                     <td class="align-middle">
-                        {{ row.id_customer }}
+                        {{ row.id_customer or "-"  }}
                     </td>
                     <td class="align-middle">
-                        {{ row.first_name_customer }}
+                        {{ row.first_name_customer or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.last_name_customer }}
+                        {{ row.last_name_customer or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_sector }}
+                        {{ row.name_sector or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.phone_customer }}
+                        {{ row.phone_customer or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.personal_number_customer }}
+                        {{ row.personal_number_customer or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.location_customer }}
+                        {{ row.location_customer or "-" }}
                     </td>
 
 

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %} Supp Client {% endblock %}
+{% block body %}'
+<div class="container">
+   <div class="row">
+       <div class="col-md-12">
+           {% if not data %}
+           <form action="{{ url_for('customer_delete', id=id) }}" id="form" method="POST" novalidate>
+               <input class="btn btn-outline-danger" form="form" type="submit" value="Supprimer">
+               <a class="btn btn-outline-warning" onclick="history.back(-1)" type="button">Annuler</a>
+           </form>
+           {% else %}
+            <p>
+               Tu ne peux pas supprimé !!!
+           <br></p>
+           <p>
+               Regarde t'es donées liée !!!
+           </p>
+           <table class="table table-responsive-sm table-sm">
+            <thead>
+            <tr>
+                <th class="align-middle">
+                    ID
+                </th>
+                <th class="align-middle">
+                    Prénom
+                </th>
+                <th class="align-middle">
+                    Nom
+                </th>
+                <th class="align-middle">
+                    Date du début de l'empreint
+                </th>
+                <th class="align-middle">
+                    Date du la fin de l'empreint
+                </th>
+
+            </tr>
+            </thead>
+            {% for row in data %}
+            <tbody>
+            <tr>
+                <td class="align-middle">
+                    {{ row.id_customer or "-" }}
+                </td>
+                <td class="align-middle">
+                    {{ row.first_name_customer or "-"  }}
+                </td>
+                <td class="align-middle">
+                    {{ row.last_name_customer or "-"  }}
+                </td>
+                 <td class="align-middle">
+                    {{ row.date_start_use or "-"  }}
+                </td>
+                 <td class="align-middle">
+                    {{ row.date_end_use or "-"  }}
+                </td>
+            </tr>
+           {% endfor %}
+            </tbody>
+           </table>
+           <a class="btn btn-outline-danger" onclick="history.back(-1)" type="button">Annuler</a>
+           {% endif %}
+       </div>
+   </div>
+</div>
+{% endblock %}

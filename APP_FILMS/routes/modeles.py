@@ -113,6 +113,26 @@ def model_delete(id):
                 flash("Il faut connecter une base de données", "danger")
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
+            with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
+                sql = f"""
+                        select id_model, name_model, serial_number_device 
+                            from t_model
+                                INNER join t_device ON fk_model = id_model
+
+                            Where id_model = {id}"""
+
+                mconn_bd.execute(sql)
+                data = mconn_bd.fetchall()
+
+            return render_template('genres/modele_delete.html', data=data, id=id)
+
+        except Exception as erreur:
+            print(f"RGG Erreur générale.")
+            flash(f"RGG Exception {erreur}")
+            raise Exception(f"RGG Erreur générale. {erreur}")
+
+    elif request.method == "POST":
+        try:
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_model WHERE id_model = {id}"""
                 mconn_bd.mabd_execute(trsql_genres_afficher)

@@ -25,10 +25,10 @@
                 <tbody>
                 <tr>
                     <td class="align-middle">
-                        {{ row.id_status }}
+                        {{ row.id_status or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_status }}
+                        {{ row.name_status or "-" }}
                     </td>
                     <td class="text-center" class="align-middle">
                         <a class="btn btn-outline-warning" href="{{ url_for('status_edit', id = row.id_status) }}"

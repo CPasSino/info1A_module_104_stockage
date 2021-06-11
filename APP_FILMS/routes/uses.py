@@ -133,14 +133,35 @@ def use_delete(id):
             with MaBaseDeDonnee() as mconn_bd:
                 mconn_bd.mabd_execute(strsql_insert_genre)
 
+            with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
+                sql = f"""
+                            select id_start_use, first_name_customer, last_name_customer, serial_number_device 
+                            from t_use
+                                INNER join t_device ON id_start_use
+                                INNER join t_customer ON id_start_use
+
+                            Where id_start_use = {id}"""
+
+                mconn_bd.execute(sql)
+                data = mconn_bd.fetchall()
+
+            return render_template('genres/use_delete.html', data=data, id=id)
+
+        except Exception as erreur:
+            print(f"RGG Erreur générale.")
+            flash(f"RGG Exception {erreur}")
+            raise Exception(f"RGG Erreur générale. {erreur}")
+
+    elif request.method == "POST":
+        try:
             with MaBaseDeDonnee() as mconn_bd:
-                trsql_genres_afficher = f"""DELETE FROM t_use WHERE id_start_use = {id}"""
+                trsql_genres_afficher = f"""DELETE FROM t_model WHERE id_model = {id}"""
                 mconn_bd.mabd_execute(trsql_genres_afficher)
 
             flash(f"Données supprimées !!", "success")
             print(f"Données supprimées !!")
 
-            return redirect(url_for('use_afficher', order_by='ASC', id_use=0))
+            return redirect(url_for('use_afficher', order_by='ASC', id_modele=0))
 
         except Exception as erreur:
             print(f"RGG Erreur générale.")
@@ -199,12 +220,12 @@ def use_edit(id):
     strsql_insert_genre = f"""SELECT id_model, name_model FROM t_model WHERE quantite_model > 0 """
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
-        device = mc_afficher.fetchall()
+        model = mc_afficher.fetchall()
 
     strsql_insert_genre = f"""SELECT id_model, name_model FROM t_model INNER JOIN t_use ON id_start_use = {id} INNER JOIN t_device ON id_device = fk_device WHERE id_model = fk_model """
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
         mc_afficher.execute(strsql_insert_genre)
-        used_device = mc_afficher.fetchone()
+        used_model = mc_afficher.fetchone()
 
     strsql_insert_genre = f"""SELECT id_customer, first_name_customer, last_name_customer FROM t_customer """
     with MaBaseDeDonnee().connexion_bd.cursor() as mc_afficher:
@@ -216,6 +237,6 @@ def use_edit(id):
         mc_afficher.execute(strsql_insert_genre)
         used_customer = mc_afficher.fetchone()
 
-    return render_template("genres/use_edit.html", form=form, device=device, used_device=used_device,
+    return render_template("genres/use_edit.html", form=form, model=model, used_model=used_model,
                            strsql_insert_genre=strsql_insert_genre, used_customer=used_customer, customer=customer,
                            id=id)

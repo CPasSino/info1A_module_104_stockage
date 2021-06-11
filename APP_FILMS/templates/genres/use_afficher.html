@@ -18,7 +18,7 @@
                         Modèle
                     </th>
                     <th class="align-middle">
-                        Appareil
+                        Numéro de série de l'appareil
                     </th>
                     <th class="align-middle">
                         Client
@@ -41,25 +41,25 @@
                 <tbody>
                 <tr>
                     <td class="align-middle">
-                        {{ row.id_start_use }}
+                        {{ row.id_start_use or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.name_model }}
+                        {{ row.name_model or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.serial_number_device }}
+                        {{ row.serial_number_device or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.first_name_customer }} {{ row.last_name_customer }}
+                        {{ row.first_name_customer or "-" }} {{ row.last_name_customer or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.date_start_use }}
+                        {{ row.date_start_use or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.date_end_use }}
+                        {{ row.date_end_use or "-" }}
                     </td>
                     <td class="align-middle">
-                        {{ row.reason_end_use }}
+                        {{ row.reason_end_use or "-" }}
                     </td>
                     <td class="text-center" class="align-middle">
                         <a class="btn btn-outline-warning" href="{{ url_for('use_edit', id = row.id_start_use) }}"

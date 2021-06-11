@@ -116,6 +116,26 @@ def customer_delete(id):
                 flash("Il faut connecter une base de données", "danger")
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
+            with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
+                sql = f"""
+                        select id_customer, first_name_customer, last_name_customer, date_start_use, date_end_use 
+                            from t_customer
+                                INNER join t_use ON fk_customer = id_customer
+
+                            Where id_customer = {id}"""
+
+                mconn_bd.execute(sql)
+                data = mconn_bd.fetchall()
+
+            return render_template('genres/customer_delete.html', data=data, id=id)
+
+        except Exception as erreur:
+            print(f"RGG Erreur générale.")
+            flash(f"RGG Exception {erreur}")
+            raise Exception(f"RGG Erreur générale. {erreur}")
+
+    elif request.method == "POST":
+        try:
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_customer WHERE id_customer = {id}"""
                 mconn_bd.mabd_execute(trsql_genres_afficher)

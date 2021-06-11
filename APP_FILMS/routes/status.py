@@ -105,6 +105,26 @@ def status_delete(id):
                 flash("Il faut connecter une base de données", "danger")
                 raise MaBdErreurConnexion(f"{msg_erreurs['ErreurConnexionBD']['message']} {erreur.args[0]}")
 
+            with MaBaseDeDonnee().connexion_bd.cursor() as mconn_bd:
+                sql = f"""
+                        select id_status, name_status, serial_number_device 
+                            from t_status
+                                INNER join t_device ON fk_status = id_status
+
+                            Where id_status = {id}"""
+
+                mconn_bd.execute(sql)
+                data = mconn_bd.fetchall()
+
+            return render_template('genres/status_delete.html', data=data, id=id)
+
+        except Exception as erreur:
+            print(f"RGG Erreur générale.")
+            flash(f"RGG Exception {erreur}")
+            raise Exception(f"RGG Erreur générale. {erreur}")
+
+    elif request.method == "POST":
+        try:
             with MaBaseDeDonnee() as mconn_bd:
                 trsql_genres_afficher = f"""DELETE FROM t_status WHERE id_status = {id}"""
                 mconn_bd.mabd_execute(trsql_genres_afficher)
