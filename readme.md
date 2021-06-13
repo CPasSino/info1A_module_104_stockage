@@ -19,5 +19,5 @@ Mon Projet
   * Puis empreint
 * Comme ça vous aurez la belle barre animé sur la page Home (et surtout ne pas oublier la fameuse page 404 que j'ai faites)  
 * Pour que la barre animé change il faut que dans le device vous séléctionner des modèles et c'est a ce moment la ou il y'aura plus de quantité dans les modèle et ensuite dans les empreints vous pourrez empreinter un modèle. si vous ne voyez pas de modèle c'est parce qu'il y'en a plus de quantité.
-
+* Ne pas oublier mon MLD,etc.. danns le dossier et database ensuite tout ce trouve ici.
 
